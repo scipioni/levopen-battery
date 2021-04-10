@@ -1,16 +1,5 @@
-/** NimBLE_Server Demo:
- *
- *  Demonstrates many of the available features of the NimBLE server library.
- *  
- *  Created: on March 22 2020
- *      Author: H2zero
- * 
-*/
-
 #include <Arduino.h>
-
 #include "ble.h"
-
 
 class ServerCallbacks : public NimBLEServerCallbacks
 {
