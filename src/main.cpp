@@ -1,19 +1,23 @@
 #include <Arduino.h>
-#include "ble.h"
+#include "levopendisplay.h"
+//#include "ble.h"
 //#include "led.h"
+
+LevopenDisplay levo = LevopenDisplay();
 
 void setup()
 {
   Serial.begin(230400);
   Serial.println("setup ...");
-  led_setup();
-  ble_setup();
+  levo.setup();
+
+  //ble_setup();
 }
 
 void loop()
 {
   /**  just spams notifications to all connected clients */
-  delay(2000);
+  delay(1000);
   // if (pServer->getConnectedCount())
   // {
   //    Serial.println("xxx ...");
