@@ -2,14 +2,14 @@
 //#define CONFIG_BT_NIMBLE_PINNED_TO_CORE
 #include <NimBLEDevice.h>
 
-class LevopenDisplay : public NimBLEServerCallbacks
+class LevopenBattery : public NimBLEServerCallbacks
 {
 private:
     NimBLEServer *pServer;
     NimBLECharacteristic *pCharacteristic;
 
 public:
-    LevopenDisplay();
+    LevopenBattery();
 
     void setup();
 
@@ -19,4 +19,4 @@ public:
     void notify();
 };
 
-extern LevopenDisplay levo;
+extern LevopenBattery levo;

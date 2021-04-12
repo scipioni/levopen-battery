@@ -1,9 +1,5 @@
 #include <Arduino.h>
-#include "levopendisplay.h"
-//#include "ble.h"
-//#include "led.h"
-
-//LevopenDisplay levo = LevopenDisplay();
+#include "levopenBattery.h"
 
 void setup()
 {
