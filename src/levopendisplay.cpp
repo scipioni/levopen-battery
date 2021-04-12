@@ -3,6 +3,12 @@
 #include "levopendisplay.h"
 #include "led.h"
 
+#if CONFIG_FREERTOS_UNICORE
+#define ARDUINO_RUNNING_CORE 0
+#else
+#define ARDUINO_RUNNING_CORE 1
+#endif
+
 /*
 Sun Apr 11 08:31:06 GMT+02:00 2021: Service 00001800-0000-1000-8000-00805f9b34fb
 Characteristics:
@@ -46,6 +52,10 @@ Characteristics:
 #define BLE_SERVICE_3 "0003"
 #define BLE_SERVICE_3_1 "0013"
 
+#define BLE_NOTIFY_INTERVAL 1000
+
+LevopenDisplay levo = LevopenDisplay();
+
 LevopenDisplay::LevopenDisplay()
 {
     ;
@@ -60,18 +70,21 @@ void LevopenDisplay::setup()
     pServer->setCallbacks(this);
 
     NimBLEService *pService = pServer->createService(BLE_SERVICE_3);
-    NimBLECharacteristic *pCharacteristic = pService->createCharacteristic(BLE_SERVICE_3_1,
-                                                                           NIMBLE_PROPERTY::READ |
-                                                                               NIMBLE_PROPERTY::WRITE |
-                                                                               NIMBLE_PROPERTY::NOTIFY);
+    this->pCharacteristic = pService->createCharacteristic(BLE_SERVICE_3_1,
+                                                           NIMBLE_PROPERTY::READ |
+                                                               NIMBLE_PROPERTY::WRITE |
+                                                               NIMBLE_PROPERTY::NOTIFY);
 
     pService->start();
-    pCharacteristic->setValue("Hello BLE");
+    this->pCharacteristic->setValue("Hello BLE");
 
     NimBLEAdvertising *pAdvertising = NimBLEDevice::getAdvertising();
     pAdvertising->addServiceUUID(BLE_SERVICE_3);
     pAdvertising->setScanResponse(true); // better false for battery devices
     pAdvertising->start();
+
+    /* has to run the task on the same core as Arduino is running */
+    xTaskCreatePinnedToCore(this->notify_cron, "notify", 10500, NULL, 5, NULL, ARDUINO_RUNNING_CORE);
 }
 
 void LevopenDisplay::onConnect(NimBLEServer *pServer, ble_gap_conn_desc *desc)
@@ -88,4 +101,22 @@ void LevopenDisplay::onDisconnect(NimBLEServer *pServer, ble_gap_conn_desc *desc
     led_interval = BLINK_SLOW;
     Serial.println(NimBLEAddress(desc->peer_ota_addr).toString().c_str());
     NimBLEDevice::startAdvertising();
+}
+
+void LevopenDisplay::notify_cron(void *parameter) // questa è statica
+{
+    //LevopenDisplay *instance = (LevopenBattery *)parameter;
+
+    for (;;)
+    {
+        levo.notify();
+        vTaskDelay(BLE_NOTIFY_INTERVAL / portTICK_PERIOD_MS);
+    }
+}
+
+void LevopenDisplay::notify()
+{
+    Serial.println("notify");
+    this->pCharacteristic->setValue(String(millis()));
+    this->pCharacteristic->notify();
 }

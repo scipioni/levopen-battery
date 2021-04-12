@@ -3,7 +3,7 @@
 //#include "ble.h"
 //#include "led.h"
 
-LevopenDisplay levo = LevopenDisplay();
+//LevopenDisplay levo = LevopenDisplay();
 
 void setup()
 {
