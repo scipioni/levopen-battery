@@ -28,4 +28,9 @@ void loop()
   //   }
   //}
   Serial.println(millis());
+  Serial.print("Battery voltage is ");
+	Serial.print(levo.battery.voltage());
+	Serial.print(" (");
+	Serial.print(levo.battery.level());
+	Serial.println("%)");
 }
