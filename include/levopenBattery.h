@@ -1,25 +1,26 @@
 #include <Arduino.h>
-//#define CONFIG_BT_NIMBLE_PINNED_TO_CORE
-#include <NimBLEDevice.h>
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
 #include "battery.h"
 
 #define VSENSE_PIN A0
 
-class LevopenBattery : public NimBLEServerCallbacks
+class LevopenBattery : public BLEServerCallbacks
 {
 private:
-    NimBLEServer *pServer;
-    NimBLECharacteristic *pCharacteristic;
+    BLEServer *pServer;
+    BLECharacteristic *pCharacteristic;
 
-    NimBLEService *pService1800, *pService1801, *pService180A, *pService0001, *pService0002, *pService0003, *pService1816;
-    NimBLECharacteristic *pChar1800_2A00, *pChar1800_2A01, *pChar1800_2A04;
-    NimBLECharacteristic *pChar180A_2A29, *pChar180A_2A28;
-    NimBLECharacteristic *pChar0003_0013;
-    NimBLECharacteristic *pChar0001_0011;
-    NimBLECharacteristic *pChar1816_0013;
-    NimBLECharacteristic *pChar1816_2A5C;
-    NimBLECharacteristic *pChar1816_2A5B;
-    NimBLECharacteristic *pChar0002_0012;
+    BLEService *pService1800, *pService1801, *pService180A, *pService0001, *pService0002, *pService0003, *pService1816;
+    BLECharacteristic *pChar1800_2A00, *pChar1800_2A01, *pChar1800_2A04;
+    BLECharacteristic *pChar180A_2A29, *pChar180A_2A28;
+    BLECharacteristic *pChar0003_0013;
+    BLECharacteristic *pChar0001_0011;
+    BLECharacteristic *pChar1816_0013;
+    BLECharacteristic *pChar1816_2A5C;
+    BLECharacteristic *pChar1816_2A5B;
+    BLECharacteristic *pChar0002_0012;
 
 
 public:
@@ -28,8 +29,8 @@ public:
 
     void setup();
 
-    void onConnect(NimBLEServer *, ble_gap_conn_desc *);
-    void onDisconnect(NimBLEServer *, ble_gap_conn_desc *);
+    void onConnect(BLEServer *);
+    void onDisconnect(BLEServer *);
     static void notify_cron(void *parameter);
     void notify();
 };
