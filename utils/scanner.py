@@ -16,8 +16,8 @@ from bleak.backends.scanner import AdvertisementData
 from bleak import BleakScanner
 from bleak.backends.device import BLEDevice
 
-mac_addr = '30:AE:A4:FF:45:3E' # esp32 TTGO
-#mac_addr = 'DC:9E:23:1F:92:96' # turbo levo
+#mac_addr = '30:AE:A4:FF:45:3E' # esp32 TTGO
+mac_addr = 'DC:9E:23:1F:92:96' # turbo levo
 
 try:
     mac_addr = sys.argv[1]
@@ -46,17 +46,23 @@ async def print_services(mac_addr: str):
             print("service: %s" % service)
         print()
         for uid in (
-            "00002a00-0000-1000-8000-00805f9b34fb",
-            "00002a01-0000-1000-8000-00805f9b34fb",
-            "00002a04-0000-1000-8000-00805f9b34fb",
-            "00002a28-0000-1000-8000-00805f9b34fb",
-            "00002a29-0000-1000-8000-00805f9b34fb",
+            # "00002a00-0000-1000-8000-00805f9b34fb",
+            # "00002a01-0000-1000-8000-00805f9b34fb",
+            # "00002a04-0000-1000-8000-00805f9b34fb",
+            # "00002a28-0000-1000-8000-00805f9b34fb",
+            # "00002a29-0000-1000-8000-00805f9b34fb",
+            # "00000013-0000-4b49-4e4f-525441474947",
+            "00000011-0000-4b49-4e4f-525441474947",
+            "00000001-0000-4b49-4e4f-525441474947",
+            "00000021-0000-4b49-4e4f-525441474947",
+            "00000002-0000-4b49-4e4f-525441474947",
+            "00000012-0000-4b49-4e4f-525441474947",
+            "00000003-0000-4b49-4e4f-525441474947",
             "00000013-0000-4b49-4e4f-525441474947",
-
             ):
             try:
                 value = await client.read_gatt_char(uid)
-                print("char {}: {} {}".format(uid, value, "".join(map(chr, value))))
+                print("char {}: {} {}".format(uid, value, bytes2str(value)))
             except:
                 print("char %s not found" % uid)
 
