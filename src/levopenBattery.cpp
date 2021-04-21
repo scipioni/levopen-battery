@@ -14,19 +14,17 @@
 #define BLE_NAME "SPECIALIZED"
 #define BLE_NOTIFY_INTERVAL 1000
 
-uint8_t newMACAddress[] = {0x32, 0xAE, 0xA4, 0x07, 0x0D, 0x66};
+uint8_t newMACAddress[] = MACADDRESS;
 LevopenBattery levo = LevopenBattery();
 
 LevopenBattery::LevopenBattery()
 {
-    ; 
+    ;
 }
 
 void LevopenBattery::setup()
 {
     led_setup();
-
-    
 
     esp_wifi_set_mac(WIFI_IF_STA, &newMACAddress[0]);
 
@@ -72,7 +70,7 @@ void LevopenBattery::setup()
     pChar1816_2A5B = pService1816->createCharacteristic("00002a5b-0000-1000-8000-00805f9b34fb", NIMBLE_PROPERTY::NOTIFY);
     pChar1816_2A5C = pService1816->createCharacteristic("00002a5c-0000-1000-8000-00805f9b34fb", NIMBLE_PROPERTY::READ);
     pChar1816_2A5C->setValue("0300");
-    
+
     /** Start the services when finished creating all Characteristics and Descriptors */
     pService180A->start();
     pService1816->start();
@@ -80,14 +78,24 @@ void LevopenBattery::setup()
     pService0002->start();
     pService0001->start();
 
+    uint8_t Adv_DATA[] = {0x0D, 0x02, // manufacter 0x020D
+        0x02, 0x5D, 0x03, 0x00, 0xff, 0xff, 0xff, 0xff,0xff,0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,0xff,0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,0xff,0xff,
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,0xff,0xff,
+        };
     NimBLEAdvertising *pAdvertising = NimBLEDevice::getAdvertising(); //pServer->getAdvertising();
-    pAdvertising->addServiceUUID(pService0003->getUUID());
-    pAdvertising->addServiceUUID(pService180A->getUUID());
     pAdvertising->addServiceUUID(pService1816->getUUID());
-    pAdvertising->addServiceUUID(pService0001->getUUID());
-    pAdvertising->addServiceUUID(pService0002->getUUID());
-    pAdvertising->setScanResponse(true); // better false for battery devices
-    // pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
+    BLEAdvertisementData oAdvertisementCustom = BLEAdvertisementData();
+    oAdvertisementCustom.setManufacturerData(std::string((char *)&Adv_DATA[0], 8)); // 42 is length of Adv_DATA
+    oAdvertisementCustom.setFlags(0x06);
+    pAdvertising->setAdvertisementData(oAdvertisementCustom);
+    //pAdvertising->addServiceUUID(pService0003->getUUID());
+    //pAdvertising->addServiceUUID(pService180A->getUUID());
+    //pAdvertising->addServiceUUID(pService0001->getUUID());
+    //pAdvertising->addServiceUUID(pService0002->getUUID());
+    pAdvertising->setScanResponse(false); // better false for battery devices
+    //pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
     // pAdvertising->setMaxPreferred(0x12);
 
     // BLEDevice::startAdvertising();

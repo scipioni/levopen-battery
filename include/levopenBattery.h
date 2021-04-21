@@ -4,6 +4,7 @@
 #include "battery.h"
 
 #define VSENSE_PIN A0
+#define MACADDRESS {0xDC, 0x9E, 0x23, 0x1F, 0x92, 0x96} //DC:9E:23:1F:92:96
 
 class LevopenBattery : public NimBLEServerCallbacks
 {
