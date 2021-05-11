@@ -3,9 +3,14 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include "battery.h"
+#include "canbus.h"
 
-#define VSENSE_PIN A0
-#define MACADDRESS {0xDC, 0x9E, 0x23, 0x1F, 0x92, 0x96} //DC:9E:23:1F:92:96
+
+//#define POWER_OFF_PIN 32 // pin that control power off
+#define MACADDRESS                         \
+    {                                      \
+        0xDC, 0x9E, 0x23, 0x1F, 0x92, 0x96 \
+    } //DC:9E:23:1F:92:96
 
 class LevopenBattery : public BLEServerCallbacks
 {
@@ -23,10 +28,9 @@ private:
     BLECharacteristic *pChar1816_2A5B;
     BLECharacteristic *pChar0002_0012;
 
-
 public:
     LevopenBattery();
-    Battery battery = Battery(3400, 4200, VSENSE_PIN);
+    
 
     void setup();
 
@@ -34,6 +38,7 @@ public:
     void onDisconnect(BLEServer *);
     static void notify_cron(void *parameter);
     void notify();
+    void poweroff();
 };
 
 extern LevopenBattery levo;

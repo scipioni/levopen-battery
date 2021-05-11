@@ -1,0 +1,44 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=power-channel-p
+*Date=15:26:42
+*CreatedBy=Fritzing 0.9.6b..
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;THT;2.7353;-7.30222;-180;Bottom;J8
+2;;THT;15.4353;-27.6222;180;Bottom;J5
+3;100nF;100 mil [THT, multilayer];38.2953;-8.57222;90;Bottom;C2
+4;;THT;15.4353;-25.0822;-180;Bottom;J6
+5;150k;THT;25.5953;-22.5422;180;Bottom;R9
+6;1µF;100 mil [THT, electrolytic];35.7553;-13.6522;-90;Bottom;C1
+7;150k;THT;30.7642;-4.33042;0;Bottom;R5
+8;680k;THT;10.3553;-14.9222;0;Bottom;R2
+9;;THT;33.2153;-22.5422;-180;Bottom;J4
+10;150k;THT;7.8153;-17.4622;180;Bottom;R1
+11;;THT;43.3753;-20.0022;-180;Bottom;J10
+12;;TO220 [THT];23.0553;-26.6062;0;Bottom;Q4
+13;;TO92 [THT];18.0642;-17.2717;-90;Bottom;Q2
+14;150k;THT;10.3553;-4.76222;180;Bottom;R10
+15;;THT;43.3753;-25.0822;-180;Bottom;J11
+16;10k;THT;35.7553;-20.0022;0;Bottom;R6
+17;10k;THT;30.6753;-12.3822;-90;Bottom;R4
+18;470k;THT;10.3553;-7.30222;0;Bottom;R7
+19;5V;TO220 [THT];35.7553;-26.6062;0;Bottom;U1
+20;;THT;43.3753;-22.5422;-180;Bottom;J7
+21;;TO220 [THT];7.8153;-26.6062;0;Bottom;Q1
+22;;TO92 [THT];20.3248;-7.21332;0;Bottom;Q3
+23;;300 mil [THT];11.5999;-20.0022;0;Bottom;D1
+24;;THT;5.2753;-20.0022;180;Bottom;J12
+25;680k;THT;28.1353;-14.9222;90;Bottom;R8
+26;;THT;2.7353;-9.84222;-180;Bottom;J9
+27;;THT;2.7353;-4.76222;180;Bottom;J3
+28;;;23.0553;-17.4622;0;Bottom;Jumper1
+29;220k;THT;12.8953;-12.3822;0;Bottom;R3

@@ -18,6 +18,7 @@ static BLEUUID uuid1816("00001816-0000-1000-8000-00805f9b34fb");
 uint8_t Adv_DATA[] = {0x0D, 0x02, 0x02, 0xE7, 0x03, 0x01, 0xff, 0xff};
 
 LevopenBattery levo = LevopenBattery();
+Battery battery = Battery(V_K, V_MIN_mV, V_MAX_mV, V_PIN);
 
 LevopenBattery::LevopenBattery()
 {
@@ -27,6 +28,10 @@ LevopenBattery::LevopenBattery()
 void LevopenBattery::setup()
 {
     led_setup();
+    canbus_setup();
+
+    // pinMode(POWER_OFF_PIN, OUTPUT);
+    // digitalWrite(POWER_OFF_PIN, LOW);
 
     //esp_wifi_set_mac(WIFI_IF_STA, &newMACAddress[0]);
 
@@ -133,4 +138,14 @@ void LevopenBattery::notify()
     //pChar0003_0013->setValue(data, 2);
     //pChar0003_0013->setValue(String(millis()));
     //pChar0003_0013->notify();
+}
+
+void LevopenBattery::poweroff()
+{
+    led_interval = BLINK_FAST;
+    Serial.printf("power off, bye...");
+   //digitalWrite(POWER_OFF_PIN, HIGH);
+    pinMode(POWER_BUTTON_PIN, INPUT_PULLDOWN);
+    //vTaskDelay(1000); // in produzione qui non ci arrivo
+    //digitalWrite(POWER_OFF_PIN, LOW); // serve solo se sto alimentando con usb durante il debug
 }

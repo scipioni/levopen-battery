@@ -3,7 +3,7 @@
 
 void setup()
 {
-  Serial.begin(230400);
+  Serial.begin(115200);
   Serial.println("setup ...");
   levo.setup();
 
@@ -14,6 +14,10 @@ void loop()
 {
   /**  just spams notifications to all connected clients */
   delay(1000);
+  if (battery.button()) {
+    levo.poweroff();
+  }
+  //vTaskDelay(1000);
   // if (pServer->getConnectedCount())
   // {
   //    Serial.println("xxx ...");
@@ -27,10 +31,10 @@ void loop()
   //     }
   //   }
   //}
-  Serial.println(millis());
-  Serial.print("Battery voltage is ");
-	Serial.print(levo.battery.voltage());
-	Serial.print(" (");
-	Serial.print(levo.battery.level());
-	Serial.println("%)");
+  //Serial.println(millis());
+  //Serial.printf("Battery voltage is %d (%d)\n", levo.battery.voltage(), levo.battery.level());
+	// Serial.print(levo.battery.voltage());
+	// Serial.print(" (");
+	// Serial.print(levo.battery.level());
+	// Serial.println("%)");
 }

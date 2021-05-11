@@ -1,0 +1,40 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=latch2
+*Date=08:52:16
+*CreatedBy=Fritzing 0.9.6b..
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;0.22mF;1010 [SMD, electrolytic];35.1032;-26.3049;0;Top;C3
+2;10k;THT;19.1033;-8.22485;-90;Bottom;R14
+3;100k;THT;14.1223;-25.9089;0;Bottom;R8
+4;;THT;3.10329;-30.3049;0;Bottom;J6
+5;;;33.7312;-11.4734;0;Bottom;Via1
+6;330µH;400 mil [THT];25.1033;-22.385;-90;Bottom;L1
+7;;;37.7952;-19.6014;0;Bottom;Via2
+8;150k;THT;22.1033;-21.3849;90;Bottom;R13
+9;5V;TO-263;34.7137;-10.1168;0;Top;U4
+10;10k;THT;13.1033;-8.38487;90;Bottom;R10
+11;;TO92 [THT];12.4528;-19.2161;0;Bottom;Q4
+12;100nF;100 mil [THT, multilayer];19.1033;-19.0349;90;Bottom;C4
+13;;THT;20.1033;-30.3049;0;Bottom;J3
+14;;THT;3.10329;-3.30487;180;Bottom;J7
+15;;300 mil [THT];25.1033;-10.0896;90;Bottom;D9
+16;;THT;3.10329;-7.30481;0;Bottom;J11
+17;;TO220 [THT];11.5633;-31.8289;0;Bottom;Q2
+18;470k;THT;6.10328;-20.7908;90;Bottom;R9
+19;;THT;26.1034;-3.30487;0;Bottom;J10
+20;10k;THT;16.1033;-8.38487;90;Bottom;R16
+21;;THT;3.10329;-19.575;0;Bottom;J2
+22;;300 mil [THT];7.10328;-7.08947;90;Bottom;D2
+23;;300 mil [THT];12.3187;-22.8594;0;Bottom;D8
+24;;300 mil [THT];10.1033;-11.5203;-90;Bottom;D4
+25;;THT;26.1034;-30.3049;0;Bottom;J8
