@@ -5,7 +5,6 @@
 #include "battery.h"
 #include "canbus.h"
 
-
 //#define POWER_OFF_PIN 32 // pin that control power off
 #define MACADDRESS                         \
     {                                      \

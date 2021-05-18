@@ -3,6 +3,7 @@
 #include <ESP32CAN.h>
 #include <CAN_config.h>
 
+#define CANBUS_ENABLE 0
 #define CANBUS_GND_PIN 22
 #define CANBUS_TX_PIN 19
 #define CANBUS_RX_PIN 23

@@ -3,6 +3,7 @@
 #include "battery.h"
 #include "levopenBattery.h"
 #include "led.h"
+#include "buzzer.h"
 
 #if CONFIG_FREERTOS_UNICORE
 #define ARDUINO_RUNNING_CORE 0
@@ -28,7 +29,12 @@ LevopenBattery::LevopenBattery()
 void LevopenBattery::setup()
 {
     led_setup();
+    buzzer_setup();
+    buzzer_play(3); // togliere
+
+#if CANBUS_ENABLE == 1
     canbus_setup();
+#endif
 
     // pinMode(POWER_OFF_PIN, OUTPUT);
     // digitalWrite(POWER_OFF_PIN, LOW);
@@ -144,8 +150,14 @@ void LevopenBattery::poweroff()
 {
     led_interval = BLINK_FAST;
     Serial.printf("power off, bye...");
-   //digitalWrite(POWER_OFF_PIN, HIGH);
+    //digitalWrite(POWER_OFF_PIN, HIGH);
+#if LATCH_MODE == CHANNEL_N
+    digitalWrite(POWER_BUTTON_PIN, LOW);
+    buzzer_play(1);
+#else
     pinMode(POWER_BUTTON_PIN, INPUT_PULLDOWN);
+
+#endif
     //vTaskDelay(1000); // in produzione qui non ci arrivo
     //digitalWrite(POWER_OFF_PIN, LOW); // serve solo se sto alimentando con usb durante il debug
 }

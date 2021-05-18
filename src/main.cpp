@@ -14,7 +14,9 @@ void loop()
 {
   /**  just spams notifications to all connected clients */
   delay(1000);
-  if (battery.button()) {
+
+  if (battery.button())
+  {
     levo.poweroff();
   }
   //vTaskDelay(1000);
@@ -33,8 +35,8 @@ void loop()
   //}
   //Serial.println(millis());
   //Serial.printf("Battery voltage is %d (%d)\n", levo.battery.voltage(), levo.battery.level());
-	// Serial.print(levo.battery.voltage());
-	// Serial.print(" (");
-	// Serial.print(levo.battery.level());
-	// Serial.println("%)");
+  // Serial.print(levo.battery.voltage());
+  // Serial.print(" (");
+  // Serial.print(levo.battery.level());
+  // Serial.println("%)");
 }

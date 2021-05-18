@@ -5,7 +5,7 @@
 
 void pollBattery(void *parameter)
 {
-
+   vTaskDelay(POWER_BUTTON_DELAY);
 	for (;;)
 	{ // infinite loop
 		vTaskDelay(V_POLL_INTERVAL);
@@ -32,7 +32,12 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 	pinMode(this->sensePin, INPUT);
 	analogReadResolution(9); // 9 bit for max 511
 
+#if LATCH_MODE == CHANNEL_N
+	pinMode(POWER_BUTTON_PIN, OUTPUT);
+	digitalWrite(POWER_BUTTON_PIN, HIGH);
+#else
 	pinMode(POWER_BUTTON_PIN, INPUT_PULLUP);
+#endif
 
 	voltage_mean = 0;
 	current_sample = 0;
@@ -72,7 +77,7 @@ uint8_t Battery::capacity()
 
 bool Battery::button()
 {
-  return button_pressed > 1;
+	return button_pressed > 1;
 }
 
 void Battery::debug()
@@ -107,8 +112,14 @@ uint16_t Battery::voltage()
 		tot += voltages[i];
 	voltage_mean = tot / V_SAMPLE; // 9 bit resolution 512-1
 
+#if LATCH_MODE == CHANNEL_N
+	uint16_t button_state = analogRead(sensePin);
+	Serial.printf("button analog read %d\n", button_state);
+#else
 	uint16_t button_state = analogRead(POWER_BUTTON_PIN);
 	pinMode(POWER_BUTTON_PIN, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
+#endif
+
 	if (button_state < V_BUTTON_TRIGGER)
 	{
 		button_pressed++;

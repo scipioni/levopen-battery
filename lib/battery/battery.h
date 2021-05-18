@@ -11,8 +11,11 @@
 #define V_MAX_mV 42000
 #define V_K 38500/348 // empiric: Vbattery_mV/mean
 #define V_POLL_INTERVAL 1000 //
-#define V_BUTTON_TRIGGER 20
+#define V_BUTTON_TRIGGER 150
 #define POWER_BUTTON_PIN 4
+#define POWER_BUTTON_DELAY 5000 // ms
+#define LATCH_MODE CHANNEL_N
+
 //#define DEBUG_BATTERY
 
 typedef uint8_t (*mapFn_t)(uint16_t, uint16_t, uint16_t);
