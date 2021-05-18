@@ -76,7 +76,7 @@ async def scan_adv():
 
     print("scanner start")
     await scanner.start()
-    await asyncio.sleep(5.0)
+    await asyncio.sleep(3.0)
     print("scanner stop")
     await scanner.stop()
 
@@ -122,7 +122,15 @@ async def run(address, debug=False):
                         print(f"\t\t[Descriptor] {descriptor}) | Value: {e}")
     subprocess.run(["bluetoothctl", "--", "remove", address], stdout=subprocess.DEVNULL)
 
+async def print_handles(mac_addr: str):
+    async with BleakClient(mac_addr) as client:
+        value = bytes(await client.read_gatt_char(25))
+        print(
+            f" Value: {value} '{bytes2str(value)}'"
+            )
+
 loop = asyncio.get_event_loop()
-#loop.run_until_complete(print_services(mac_addr))
 loop.run_until_complete(scan_adv())
-loop.run_until_complete(run(mac_addr, False))
+#loop.run_until_complete(run(mac_addr, False))
+loop.run_until_complete(print_services(mac_addr))
+#loop.run_until_complete(print_handles(mac_addr))
