@@ -1,3 +1,10 @@
+#define BUZZER_PIN 14
+#define BUTTON_PIN 12
+#define BATTERY_V_MIN_mV 35000 
+#define BATTERY_V_MAX_mV 42000
+#define BATTERY_K 40850/211 // empiric: V_battery_mV/mean_pin
+
+
 #include <Arduino.h>
 #include <BLEDevice.h>
 #include <BLEUtils.h>
@@ -5,11 +12,6 @@
 #include "battery.h"
 #include "canbus.h"
 
-#define BUZZER_PIN 14
-#define BUTTON_PIN 12
-#define BATTERY_V_MIN_mV 35000 
-#define BATTERY_V_MAX_mV 42000
-#define BATTERY_K 40850/214 // empiric: V_battery_mV/mean_pin
 
 /*
 #define POWER_OFF_PIN 32 // pin that control power off
