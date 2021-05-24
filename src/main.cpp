@@ -1,11 +1,11 @@
 #include <Arduino.h>
-#include "levopenBattery.h"
+#include "bike.h"
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("setup ...");
-  levo.setup();
+  Serial.println("setup()");
+  bike.setup();
 
   //ble_setup();
 }
@@ -17,7 +17,7 @@ void loop()
 
   if (battery.button())
   {
-    levo.poweroff();
+    bike.poweroff();
   }
   //vTaskDelay(1000);
   // if (pServer->getConnectedCount())

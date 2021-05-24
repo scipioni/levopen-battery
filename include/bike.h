@@ -5,13 +5,21 @@
 #include "battery.h"
 #include "canbus.h"
 
-//#define POWER_OFF_PIN 32 // pin that control power off
+#define BUZZER_PIN 14
+#define BUTTON_PIN 12
+#define BATTERY_V_MIN_mV 35000 
+#define BATTERY_V_MAX_mV 42000
+#define BATTERY_K 40850/214 // empiric: V_battery_mV/mean_pin
+
+/*
+#define POWER_OFF_PIN 32 // pin that control power off
 #define MACADDRESS                         \
     {                                      \
         0xDC, 0x9E, 0x23, 0x1F, 0x92, 0x96 \
     } //DC:9E:23:1F:92:96
+*/
 
-class LevopenBattery : public BLEServerCallbacks
+class Bike : public BLEServerCallbacks
 {
 private:
     BLEServer *pServer;
@@ -28,7 +36,7 @@ private:
     BLECharacteristic *pChar0002_0012;
 
 public:
-    LevopenBattery();
+    Bike();
     
 
     void setup();
@@ -40,4 +48,4 @@ public:
     void poweroff();
 };
 
-extern LevopenBattery levo;
+extern Bike bike;

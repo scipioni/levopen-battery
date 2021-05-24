@@ -1,16 +1,18 @@
 // https://github.com/rlogiacco/BatterySense
 
 #include "battery.h"
-#include <Arduino.h>
+//#include <Arduino.h>
 
 void pollBattery(void *parameter)
 {
-   vTaskDelay(POWER_BUTTON_DELAY);
+	Serial.print("waiting for a while to read POWER BUTTON");
+	vTaskDelay(POWER_BUTTON_DELAY);
 	for (;;)
 	{ // infinite loop
 		vTaskDelay(V_POLL_INTERVAL);
-		Serial.printf("Battery mean=%dmV last=%dmV capacity=%d%%: button=%d\n",
+		Serial.printf("Battery mean=%dmV mean_pin=%d last=%d capacity=%d%%: button=%d\n",
 					  battery.voltage(),
+					  battery.voltage_pin_mean,
 					  battery.voltage_last,
 					  battery.capacity(),
 					  battery.button());
@@ -29,12 +31,11 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 	//this->activationPin = 0xFF;
 	this->minVoltage = minVoltage;
 	this->maxVoltage = maxVoltage;
-	pinMode(this->sensePin, INPUT);
+	//pinMode(this->sensePin, INPUT);
 	analogReadResolution(9); // 9 bit for max 511
 
 #if LATCH_MODE == CHANNEL_N
-	pinMode(POWER_BUTTON_PIN, OUTPUT);
-	digitalWrite(POWER_BUTTON_PIN, HIGH);
+	pinMode(sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
 #else
 	pinMode(POWER_BUTTON_PIN, INPUT_PULLUP);
 #endif
@@ -47,6 +48,9 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 	// 	pinMode(this->activationPin, OUTPUT);
 	// }
 	this->mapFunction = (mapFunction ? mapFunction : &sigmoidal);
+
+	for (int i = 0; i < V_SAMPLE; i++)
+		voltages[i] = 0;
 
 	xTaskCreate(
 		pollBattery,	// Function that should be called
@@ -90,37 +94,35 @@ void Battery::debug()
 
 uint16_t Battery::voltage()
 {
-	//analogRead(sensePin);
 
-	//delay(2); // allow the ADC to stabilize
-	//uint16_t reading = 480 + analogRead(sensePin) * dividerRatio * refVoltage / 511; // 0.48V for diode
-	if (voltage_mean == 0)
-	{
-		Serial.printf("init voltages %d\n", analogRead(sensePin));
-		for (int i = 0; i < V_SAMPLE; i++)
-			voltages[i] = this->k * analogRead(sensePin); // to speed up mean stabilization
-		battery.debug();
-	}
+	// if (voltage_mean == 0)
+	// {
+	// 	for (int i = 0; i < V_SAMPLE; i++)
+	// 		voltages[i] = readButtonPin(); // to speed up mean stabilization
+	// 	battery.debug();
+	// }
 
 	if (current_sample >= V_SAMPLE)
 		current_sample = 0;
-	voltage_last = this->k * analogRead(sensePin);
+	voltage_last = readButtonPin();
 	voltages[current_sample++] = voltage_last;
 
 	long tot = 0;
+	int samples_valid = 0;
 	for (int i = 0; i < V_SAMPLE; i++)
-		tot += voltages[i];
-	voltage_mean = tot / V_SAMPLE; // 9 bit resolution 512-1
+	{
+		if (voltages[i] > 0) {
+			tot += voltages[i];
+			samples_valid++;
+		}
+	}
+	if (samples_valid == 0)
+	 return 0;
 
-#if LATCH_MODE == CHANNEL_N
-	uint16_t button_state = analogRead(sensePin);
-	Serial.printf("button analog read %d\n", button_state);
-#else
-	uint16_t button_state = analogRead(POWER_BUTTON_PIN);
-	pinMode(POWER_BUTTON_PIN, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
-#endif
+	voltage_pin_mean = tot / samples_valid;		   // 9 bit resolution 512-1
+	voltage_mean = this->k * voltage_pin_mean; // 9 bit resolution 512-1
 
-	if (button_state < V_BUTTON_TRIGGER)
+	if (voltage_last < V_BUTTON_TRIGGER)
 	{
 		button_pressed++;
 	}
@@ -130,4 +132,11 @@ uint16_t Battery::voltage()
 	}
 
 	return voltage_mean;
+}
+
+uint16_t Battery::readButtonPin()
+{
+	uint16_t value = analogRead(sensePin);
+	pinMode(sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
+	return value;
 }

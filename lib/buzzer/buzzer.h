@@ -1,7 +1,7 @@
 #pragma once
 
 
-#define BUZZER_PIN 32
+#define BUZZER_PIN 14
 
 
 void buzzer_setup();

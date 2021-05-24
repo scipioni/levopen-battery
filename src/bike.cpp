@@ -1,9 +1,9 @@
 #include <Arduino.h>
 
-#include "battery.h"
-#include "levopenBattery.h"
 #include "led.h"
 #include "buzzer.h"
+#include "battery.h"
+#include "bike.h"
 
 #if CONFIG_FREERTOS_UNICORE
 #define ARDUINO_RUNNING_CORE 0
@@ -18,15 +18,15 @@
 static BLEUUID uuid1816("00001816-0000-1000-8000-00805f9b34fb");
 uint8_t Adv_DATA[] = {0x0D, 0x02, 0x02, 0xE7, 0x03, 0x01, 0xff, 0xff};
 
-LevopenBattery levo = LevopenBattery();
-Battery battery = Battery(V_K, V_MIN_mV, V_MAX_mV, V_PIN);
+Bike bike = Bike();
+Battery battery = Battery(BATTERY_K, BATTERY_V_MIN_mV, BATTERY_V_MAX_mV, BUTTON_PIN);
 
-LevopenBattery::LevopenBattery()
+Bike::Bike()
 {
     ;
 }
 
-void LevopenBattery::setup()
+void Bike::setup()
 {
     led_setup();
     buzzer_setup();
@@ -102,7 +102,7 @@ void LevopenBattery::setup()
     xTaskCreatePinnedToCore(this->notify_cron, "notify", 10500, NULL, 5, NULL, ARDUINO_RUNNING_CORE);
 }
 
-void LevopenBattery::onConnect(BLEServer *pServer)
+void Bike::onConnect(BLEServer *pServer)
 {
     Serial.print("Client connected: ");
     led_interval = BLINK_FAST;
@@ -118,7 +118,7 @@ void LevopenBattery::onConnect(BLEServer *pServer)
     //BLEDevice::startAdvertising();
 }
 
-void LevopenBattery::onDisconnect(BLEServer *pServer)
+void Bike::onDisconnect(BLEServer *pServer)
 {
     Serial.print("Client disconnected: ");
     led_interval = BLINK_SLOW;
@@ -126,7 +126,7 @@ void LevopenBattery::onDisconnect(BLEServer *pServer)
     pServer->startAdvertising();
 }
 
-void LevopenBattery::notify_cron(void *parameter) // questa è statica
+void Bike::notify_cron(void *parameter) // questa è statica
 {
     //LevopenDisplay *instance = (LevopenBattery *)parameter;
 
@@ -137,7 +137,7 @@ void LevopenBattery::notify_cron(void *parameter) // questa è statica
     }
 }
 
-void LevopenBattery::notify()
+void Bike::notify()
 {
     Serial.println("notify");
     //uint8_t data[2] = { 0, 0 };
@@ -146,14 +146,15 @@ void LevopenBattery::notify()
     //pChar0003_0013->notify();
 }
 
-void LevopenBattery::poweroff()
+void Bike::poweroff()
 {
     led_interval = BLINK_FAST;
     Serial.printf("power off, bye...");
     //digitalWrite(POWER_OFF_PIN, HIGH);
 #if LATCH_MODE == CHANNEL_N
-    digitalWrite(POWER_BUTTON_PIN, LOW);
+    //digitalWrite(POWER_BUTTON_PIN, LOW);
     buzzer_play(1);
+    pinMode(BUTTON_PIN, INPUT_PULLDOWN);
 #else
     pinMode(POWER_BUTTON_PIN, INPUT_PULLDOWN);
 

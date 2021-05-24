@@ -6,14 +6,14 @@
 #include <Arduino.h>
 
 #define V_SAMPLE 30 // how many values use for mean value
-#define V_PIN 35
-#define V_MIN_mV 35000 // real value minus 500mV of diode
-#define V_MAX_mV 42000
-#define V_K 38500/348 // empiric: Vbattery_mV/mean
+#define BUTTON_PIN 12
+#define BATTERY_V_MIN_mV 35000 // real value minus 500mV of diode
+#define BATTERY_V_MAX_mV 42000
+#define BATTERY_K 40800/244 // empiric: Vbattery_mV/last
 #define V_POLL_INTERVAL 1000 //
-#define V_BUTTON_TRIGGER 150
-#define POWER_BUTTON_PIN 4
-#define POWER_BUTTON_DELAY 5000 // ms
+#define V_BUTTON_TRIGGER 100
+//#define POWER_BUTTON_PIN 4
+#define POWER_BUTTON_DELAY 2000 // ms
 #define LATCH_MODE CHANNEL_N
 
 //#define DEBUG_BATTERY
@@ -64,6 +64,7 @@ public:
 
 	uint16_t voltage_last;
 	uint8_t button_pressed;
+	uint16_t voltage_pin_mean;
 private:
 	uint16_t minVoltage;
 	uint16_t maxVoltage;
@@ -75,6 +76,7 @@ private:
 	uint16_t voltage_mean;
 	uint16_t voltages[V_SAMPLE];
 	uint8_t current_sample;
+	uint16_t readButtonPin();
 };
 
 //

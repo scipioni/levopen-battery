@@ -6,6 +6,7 @@ int led_interval = BLINK_SLOW;
 
 void toggleLED(void *parameter)
 {
+    
     for (;;)
     { // infinite loop
         //Serial.println(led_interval);
@@ -35,4 +36,5 @@ void led_setup()
         1,            // Task priority
         NULL          // Task handle
     );
+    Serial.println("led initialized");
 }
