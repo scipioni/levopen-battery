@@ -1,8 +1,8 @@
 #include <Arduino.h>
+#include <BLE2902.h>
 
 #include "led.h"
 #include "buzzer.h"
-#include "battery.h"
 #include "bike.h"
 
 #if CONFIG_FREERTOS_UNICORE
@@ -15,7 +15,27 @@
 #define BLE_NOTIFY_INTERVAL 1000
 
 //uint8_t newMACAddress[] = {0x32, 0xAE, 0xA4, 0x07, 0x0D, 0x66};
-static BLEUUID uuid1816("00001816-0000-1000-8000-00805f9b34fb");
+static BLEUUID service_1816("00001816-0000-1000-8000-00805f9b34fb");
+
+static BLEUUID service_180a("0000180a-0000-1000-8000-00805f9b34fb");
+static BLEUUID char_2a29("00002a29-0000-1000-8000-00805f9b34fb");
+static BLEUUID char_2a28("00002a28-0000-1000-8000-00805f9b34fb");
+
+
+static BLEUUID service_0003("00000003-0000-4b49-4e4f-525441474947");
+static BLEUUID char_0013("00000013-0000-4b49-4e4f-525441474947");
+
+static BLEUUID service_0001("00000001-0000-4b49-4e4f-525441474947");
+static BLEUUID char_0011("00000011-0000-4b49-4e4f-525441474947"); //
+static BLEUUID char_0021("00000001-0000-4b49-4e4f-525441474947"); //
+
+static BLEUUID service_0002("00000002-0000-4b49-4e4f-525441474947");
+static BLEUUID char_0012("00000012-0000-4b49-4e4f-525441474947");
+
+//#define SERVICE_0003_UUID "00000003-0000-4b49-4e4f-525441474947"
+
+uint8_t battery_soc[20] = {00, 0x0c, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+
 uint8_t Adv_DATA[] = {0x0D, 0x02, 0x02, 0xE7, 0x03, 0x01, 0xff, 0xff};
 
 Bike bike = Bike();
@@ -41,14 +61,24 @@ void Bike::setup()
 
     //esp_wifi_set_mac(WIFI_IF_STA, &newMACAddress[0]);
 
+    // 0x09	«Complete Local Name»
     BLEDevice::init(BLE_NAME);
 
+    // 0x01	«Flags»
+
     /** Optional: set the transmit power, default is 3db */
-    BLEDevice::setPower(ESP_PWR_LVL_P7); /** +7db */
+    //BLEDevice::setPower(ESP_PWR_LVL_P7); /** +7db */
 
     pServer = BLEDevice::createServer();
-    //pServer->setCallbacks(this);
+    pServer->setCallbacks(this);
     //pServer->advertiseOnDisconnect(true);
+
+    BLEAdvertising *pAdvertising = BLEDevice::getAdvertising(); //pServer->getAdvertising();
+    BLEAdvertisementData advertisementData;
+
+    // 0xFF	«Manufacturer Specific Data»
+    advertisementData.setManufacturerData(std::string((char *)&Adv_DATA[0], 8)); // 8 is length of Adv_DATA
+    pAdvertising->setAdvertisementData(advertisementData);
 
     // pService180A = pServer->createService("0000180a-0000-1000-8000-00805f9b34fb"); // device information
     // pChar180A_2A28 = pService180A->createCharacteristic("00002a28-0000-1000-8000-00805f9b34fb", BLE_PROPERTY::READ);
@@ -63,48 +93,53 @@ void Bike::setup()
     // pService0002 = pServer->createService("00000002-0000-4b49-4e4f-525441474947");
     // pChar0002_0012 = pService0002->createCharacteristic("00000012-0000-4b49-4e4f-525441474947", BLE_PROPERTY::WRITE);
 
-    // pService0003 = pServer->createService("00000003-0000-4b49-4e4f-525441474947");
-    // pChar0003_0013 = pService0003->createCharacteristic("00000013-0000-4b49-4e4f-525441474947", BLE_PROPERTY::READ | BLE_PROPERTY::NOTIFY);
-    // pChar0003_0013->setValue("1234");
-
-    pService1816 = pServer->createService(uuid1816);
+    pService1816 = pServer->createService(service_1816);
     pChar1816_2A5B = pService1816->createCharacteristic("00002a5b-0000-1000-8000-00805f9b34fb", BLECharacteristic::PROPERTY_NOTIFY);
+    pChar1816_2A5B->addDescriptor(new BLE2902());
+    pChar1816_2A55 = pService1816->createCharacteristic("00002a55-0000-1000-8000-00805f9b34fb", BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_INDICATE);
+    pChar1816_2A55->addDescriptor(new BLE2902());
     pChar1816_2A5C = pService1816->createCharacteristic("00002a5c-0000-1000-8000-00805f9b34fb", BLECharacteristic::PROPERTY_READ);
-    pChar1816_2A5C->setValue("0300");
-
-    /** Start the services when finished creating all Characteristics and Descriptors */
-    // pService180A->start();
+    uint8_t value2A5C[] = {0x30, 0x00};
+    pChar1816_2A5C->setValue(value2A5C, 2);
     pService1816->start();
-    // pService0003->start();
-    // pService0002->start();
-    // pService0001->start();
+    pAdvertising->addServiceUUID(service_1816);
 
-    BLEAdvertising *pAdvertising = BLEDevice::getAdvertising(); //pServer->getAdvertising();
-    BLEAdvertisementData advertisementData;
+    pService180a = pServer->createService(service_180a);
+    pChar180a_2a29 = pService180a->createCharacteristic(char_2a29, BLECharacteristic::PROPERTY_READ);
+    pChar180a_2a29->setValue("SPECIALIZED");
+    pChar180a_2a28 = pService180a->createCharacteristic(char_2a28, BLECharacteristic::PROPERTY_READ);
+    pChar180a_2a28->setValue("V1.7.0");
+    pService180a->start();
 
-    advertisementData.setManufacturerData(std::string((char *)&Adv_DATA[0], 8)); // 8 is length of Adv_DATA
-    pAdvertising->setAdvertisementData(advertisementData);
-    pAdvertising->addServiceUUID(uuid1816);
+    pService0001 = pServer->createService(service_0001);
+    pChar0001_0011 = pService0001->createCharacteristic(char_0011, BLECharacteristic::PROPERTY_READ);
+    uint8_t value0011[] = {0xff, 0xff, 0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff};
+    pChar0001_0011->setValue(value0011, 20);
+    pChar0001_0021 = pService0001->createCharacteristic(char_0021, BLECharacteristic::PROPERTY_WRITE);
+    pService0001->start();
 
-    // pAdvertising->addServiceUUID(pService0003->getUUID());
-    // pAdvertising->addServiceUUID(pService180A->getUUID());
-    // pAdvertising->addServiceUUID(pService1816->getUUID());
-    // pAdvertising->addServiceUUID(pService0001->getUUID());
-    // pAdvertising->addServiceUUID(pService0002->getUUID());
+    pService0002 = pServer->createService(service_0002);
+    pChar0002_0012 = pService0002->createCharacteristic(char_0012, BLECharacteristic::PROPERTY_WRITE);
+    pService0002->start();
+
+    pService0003 = pServer->createService(service_0003);
+    pChar0003_0013 = pService0003->createCharacteristic(char_0013, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+    uint8_t value0013[] = {0x01, 0x10, 0x24, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff,0xff, 0xff};
+    pChar0003_0013->setValue(value0013, 20);
+    pChar0003_0013->addDescriptor(new BLE2902());
+    pService0003->start();
+
     pAdvertising->setScanResponse(true); // better false for battery devices
-    // pAdvertising->setMinPreferred(0x06); // functions that help with iPhone connections issue
-    // pAdvertising->setMaxPreferred(0x12);
-
-    // BLEDevice::startAdvertising();
-    pAdvertising->start();
+    BLEDevice::startAdvertising();
 
     /* has to run the task on the same core as Arduino is running */
-    xTaskCreatePinnedToCore(this->notify_cron, "notify", 10500, NULL, 5, NULL, ARDUINO_RUNNING_CORE);
+    xTaskCreatePinnedToCore(this->notify_task, "notify", 10500, NULL, 5, NULL, ARDUINO_RUNNING_CORE);
 }
 
 void Bike::onConnect(BLEServer *pServer)
 {
-    Serial.print("Client connected: ");
+    Serial.println("Client connected: ");
+    deviceConnected = true;
     led_interval = BLINK_FAST;
     //Serial.println(BLEAddress(desc->peer_ota_addr).toString().c_str());
     /** We can use the connection handle here to ask for different connection parameters.
@@ -120,30 +155,35 @@ void Bike::onConnect(BLEServer *pServer)
 
 void Bike::onDisconnect(BLEServer *pServer)
 {
-    Serial.print("Client disconnected: ");
+    Serial.println("Client disconnected: ");
+    deviceConnected = false;
     led_interval = BLINK_SLOW;
+    vTaskDelay(500 / portTICK_PERIOD_MS); // give the bluetooth stack the chance to get things ready
     //Serial.println(BLEAddress(desc->peer_ota_addr).toString().c_str());
     pServer->startAdvertising();
 }
 
-void Bike::notify_cron(void *parameter) // questa è statica
+void Bike::notify_task(void *parameter) // questa è statica
 {
     //LevopenDisplay *instance = (LevopenBattery *)parameter;
 
     for (;;)
     {
-        //levo.notify();
+        bike.notify();
         vTaskDelay(BLE_NOTIFY_INTERVAL / portTICK_PERIOD_MS);
     }
 }
 
 void Bike::notify()
 {
+    if (!deviceConnected)
+        return;
     Serial.println("notify");
     //uint8_t data[2] = { 0, 0 };
-    //pChar0003_0013->setValue(data, 2);
-    //pChar0003_0013->setValue(String(millis()));
-    //pChar0003_0013->notify();
+    battery_soc[2] = battery.capacity();
+    //uint8_t battery_soc[20] = {00, 0x0c, battery.capacity(), 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+    pChar0003_0013->setValue((uint8_t *)&battery_soc, 20);
+    pChar0003_0013->notify();
 }
 
 void Bike::poweroff()

@@ -1,17 +1,15 @@
 #define BUZZER_PIN 14
 #define BUTTON_PIN 12
-#define BATTERY_V_MIN_mV 35000 
+#define BATTERY_V_MIN_mV 35000
 #define BATTERY_V_MAX_mV 42000
-#define BATTERY_K 40850/211 // empiric: V_battery_mV/mean_pin
-
+#define BATTERY_K 40850 / 288 // empiric: V_battery_mV/mean_pin
 
 #include <Arduino.h>
 #include <BLEDevice.h>
-#include <BLEUtils.h>
 #include <BLEServer.h>
+#include <BLEUtils.h>
 #include "battery.h"
 #include "canbus.h"
-
 
 /*
 #define POWER_OFF_PIN 32 // pin that control power off
@@ -24,28 +22,48 @@
 class Bike : public BLEServerCallbacks
 {
 private:
+    bool deviceConnected = false;
+
     BLEServer *pServer;
     BLECharacteristic *pCharacteristic;
 
-    BLEService *pService1800, *pService1801, *pService180A, *pService0001, *pService0002, *pService0003, *pService1816;
-    BLECharacteristic *pChar1800_2A00, *pChar1800_2A01, *pChar1800_2A04;
-    BLECharacteristic *pChar180A_2A29, *pChar180A_2A28;
-    BLECharacteristic *pChar0003_0013;
-    BLECharacteristic *pChar0001_0011;
+    BLEService *pService1816;
     BLECharacteristic *pChar1816_0013;
     BLECharacteristic *pChar1816_2A5C;
+    BLECharacteristic *pChar1816_2A55;
     BLECharacteristic *pChar1816_2A5B;
+
+    BLEService *pService180a;
+    BLECharacteristic *pChar180a_2a29;
+    BLECharacteristic *pChar180a_2a28;
+
+    BLEService *pService0003;
+    BLECharacteristic *pChar0003_0013;
+
+    BLEService *pService0001;
+    BLECharacteristic *pChar0001_0011;
+    BLECharacteristic *pChar0001_0021;
+
+    BLEService *pService0002;
     BLECharacteristic *pChar0002_0012;
+
+
+    // BLEService *pService1800, *pService1801, *pService180A, *pService0001, *pService0002, *pService0003;
+
+    // BLECharacteristic *pChar1800_2A00, *pChar1800_2A01, *pChar1800_2A04;
+    // BLECharacteristic *pChar180A_2A29, *pChar180A_2A28;
+    // BLECharacteristic *pChar0003_0013;
+    // BLECharacteristic *pChar0001_0011;
+    // BLECharacteristic *pChar0002_0012;
 
 public:
     Bike();
-    
 
     void setup();
 
     void onConnect(BLEServer *);
     void onDisconnect(BLEServer *);
-    static void notify_cron(void *parameter);
+    static void notify_task(void *parameter);
     void notify();
     void poweroff();
 };

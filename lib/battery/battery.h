@@ -6,10 +6,10 @@
 #include <Arduino.h>
 
 #define V_SAMPLE 30 // how many values use for mean value
-#define BUTTON_PIN 12
-#define BATTERY_V_MIN_mV 35000 // real value minus 500mV of diode
-#define BATTERY_V_MAX_mV 42000
-#define BATTERY_K 40800/244 // empiric: Vbattery_mV/last
+//#define BUTTON_PIN 12
+//#define BATTERY_V_MIN_mV 35000 // real value minus 500mV of diode
+//#define BATTERY_V_MAX_mV 42000
+//#define BATTERY_K 40800/244 // empiric: Vbattery_mV/last
 #define V_POLL_INTERVAL 1000 //
 #define V_BUTTON_TRIGGER 100
 //#define POWER_BUTTON_PIN 4
