@@ -104,32 +104,42 @@ uint16_t Battery::voltage()
 
 	if (current_sample >= V_SAMPLE)
 		current_sample = 0;
-	voltage_last = readButtonPin();
+	//voltage_last = readButtonPin();
+
+	int totalValue = 0;
+	for (int i = 0; i < V_SAMPLE; i++)
+	{
+		totalValue += readButtonPin();
+	}
+	voltage_last = totalValue / V_SAMPLE;
+
+	if (voltage_last < V_BUTTON_TRIGGER)
+	{
+		button_pressed++;
+		return voltage_mean; // non sporchiamo le medie
+	}
+	else
+	{
+		button_pressed = 0;
+	}
+
 	voltages[current_sample++] = voltage_last;
 
 	long tot = 0;
 	int samples_valid = 0;
 	for (int i = 0; i < V_SAMPLE; i++)
 	{
-		if (voltages[i] > 0) {
+		if (voltages[i] > 0)
+		{
 			tot += voltages[i];
 			samples_valid++;
 		}
 	}
 	if (samples_valid == 0)
-	 return 0;
+		return 0;
 
-	voltage_pin_mean = tot / samples_valid;		   // 9 bit resolution 512-1
+	voltage_pin_mean = tot / samples_valid;	   // 9 bit resolution 512-1
 	voltage_mean = this->k * voltage_pin_mean; // 9 bit resolution 512-1
-
-	if (voltage_last < V_BUTTON_TRIGGER)
-	{
-		button_pressed++;
-	}
-	else
-	{
-		button_pressed = 0;
-	}
 
 	return voltage_mean;
 }

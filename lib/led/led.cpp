@@ -1,15 +1,13 @@
 #include <Arduino.h>
 #include "led.h"
-//#define DEBUG_INITIAL_LEVEL DEBUG_LEVEL_VERBOSE
 
 int led_interval = BLINK_SLOW;
 
 void toggleLED(void *parameter)
 {
-    
+
     for (;;)
     { // infinite loop
-        //Serial.println(led_interval);
         // Turn the LED on
         digitalWrite(LED_PIN, HIGH);
 
@@ -22,6 +20,16 @@ void toggleLED(void *parameter)
         // Pause the task again for 500ms
         vTaskDelay(led_interval / portTICK_PERIOD_MS);
     }
+}
+
+void led_fast()
+{
+    led_interval = BLINK_FAST;
+}
+
+void led_slow()
+{
+    led_interval = BLINK_SLOW;
 }
 
 void led_setup()

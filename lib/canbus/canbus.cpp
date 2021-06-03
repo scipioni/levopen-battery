@@ -14,13 +14,12 @@ PLEVELS powers[3] = {
 
 SETTINGS settings = {.running = true, .motor_is_alive = false, .initial_assistance = 0};
 
-QueueHandle_t xQueueBuzzer = NULL;
+//QueueHandle_t xQueueBuzzer = NULL;
 #define MESSAGES_OUT 4
 TX_FRAME messages_out[MESSAGES_OUT];
 TX_FRAME tx_assistances[3];
 TX_FRAME *tx_assistance; // current assistance
-SemaphoreHandle_t xSemaphore = NULL, xSemaphore300 = NULL;
-
+SemaphoreHandle_t xSemaphoreTx = NULL;
 void initialize_assistance(TX_FRAME *tx, PLEVELS *plevel)
 {
   tx->interval = 50;
@@ -47,10 +46,10 @@ void canbus_300_task(void *pvParameter)
   tx_assistance = &tx_assistances[settings.initial_assistance];
   for (;;)
   {
-    xSemaphoreTake(xSemaphore, portMAX_DELAY);
+    xSemaphoreTake(xSemaphoreTx, portMAX_DELAY);
     ESP_LOGD(LOG_TAG, "tx: id=%03x ....%02x00%02x", tx_assistance->message.identifier, tx_assistance->message.data[4], tx_assistance->message.data[6]);
     ESP32Can.CANWriteFrame(&tx_assistance->message);
-    xSemaphoreGive(xSemaphore);
+    xSemaphoreGive(xSemaphoreTx);
     vTaskDelay(pdMS_TO_TICKS(tx_assistance->interval));
   }
 }
@@ -62,8 +61,16 @@ void canbus_setup()
   CAN_cfg.rx_pin_id = (gpio_num_t)CANBUS_RX_PIN;
   CAN_cfg.rx_queue = xQueueCreate(rx_queue_size, sizeof(CAN_frame_t));
 
+  xSemaphoreTx = xSemaphoreCreateMutex();
+  xSemaphoreGive( ( xSemaphoreTx ) );
+
   pinMode(CANBUS_GND_PIN, OUTPUT);
   digitalWrite(CANBUS_GND_PIN, LOW);
+
+  pinMode(CANBUS_POWER_PIN, OUTPUT);
+  digitalWrite(CANBUS_POWER_PIN, HIGH);
+
+  vTaskDelay(pdMS_TO_TICKS(30));
 
   ESP32Can.CANInit();
 
