@@ -11,7 +11,7 @@
 //#define BATTERY_V_MAX_mV 42000
 //#define BATTERY_K 40800/244 // empiric: Vbattery_mV/last
 #define V_POLL_INTERVAL 1000 //
-#define V_BUTTON_TRIGGER 100
+#define V_BUTTON_TRIGGER 150
 //#define POWER_BUTTON_PIN 4
 #define POWER_BUTTON_DELAY 2000 // ms
 #define LATCH_MODE CHANNEL_N
@@ -65,6 +65,7 @@ public:
 	uint16_t voltage_last;
 	uint8_t button_pressed;
 	uint16_t voltage_pin_mean;
+    bool power = true;
 private:
 	uint16_t minVoltage;
 	uint16_t maxVoltage;

@@ -10,12 +10,13 @@ void pollBattery(void *parameter)
 	for (;;)
 	{ // infinite loop
 		vTaskDelay(V_POLL_INTERVAL);
-		Serial.printf("Battery mean=%dmV mean_pin=%d last=%d capacity=%d%%: button=%d\n",
-					  battery.voltage(),
-					  battery.voltage_pin_mean,
-					  battery.voltage_last,
-					  battery.capacity(),
-					  battery.button());
+		if (battery.power)
+			Serial.printf("Battery mean=%dmV mean_pin=%d last=%d capacity=%d%%: button=%d\n",
+						  battery.voltage(),
+						  battery.voltage_pin_mean,
+						  battery.voltage_last,
+						  battery.capacity(),
+						  battery.button_pressed);
 
 #ifdef DEBUG_BATTERY
 		battery.debug();
@@ -81,6 +82,8 @@ uint8_t Battery::capacity()
 
 bool Battery::button()
 {
+	if (! power)
+		return false;
 	return button_pressed > 1;
 }
 

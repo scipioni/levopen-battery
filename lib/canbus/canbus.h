@@ -4,10 +4,10 @@
 #include <CAN_config.h>
 
 #define CANBUS_ENABLE 1
-#define CANBUS_GND_PIN 16
-#define CANBUS_TX_PIN 4
-#define CANBUS_RX_PIN 0
-#define CANBUS_POWER_PIN 17
+//#define CANBUS_GND_PIN 23 // 22 //16
+#define CANBUS_TX_PIN 14 //19 //4
+#define CANBUS_RX_PIN 12 // 23 //0
+//#define CANBUS_POWER_PIN 17
 #define LOG_TAG "canbus"
 
 typedef struct TX_FRAME

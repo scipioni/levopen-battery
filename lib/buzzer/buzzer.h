@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef BUZZER_PIN
-#define BUZZER_PIN 14
+#define BUZZER_PIN 16
 #endif
 
 

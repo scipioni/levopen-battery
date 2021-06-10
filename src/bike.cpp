@@ -32,16 +32,20 @@ void Bike::setup()
 
 void Bike::poweroff()
 {
+    battery.power = false;
     led_interval = BLINK_FAST;
     Serial.printf("power off, bye...");
-#if LATCH_MODE == CHANNEL_N
+//#if LATCH_MODE == CHANNEL_N
     //digitalWrite(POWER_BUTTON_PIN, LOW);
     buzzer_play(1);
-    pinMode(BUTTON_PIN, INPUT_PULLDOWN);
-#else
-    pinMode(POWER_BUTTON_PIN, INPUT_PULLDOWN);
+    //pinMode(BUTTON_PIN, INPUT_PULLDOWN);
+    pinMode(BUTTON_PIN, OUTPUT);
+    digitalWrite(BUTTON_PIN, LOW);
+    
+//#else
+//    pinMode(POWER_BUTTON_PIN, INPUT_PULLDOWN);
 
-#endif
+//#endif
     //vTaskDelay(1000); // in produzione qui non ci arrivo
     //digitalWrite(POWER_OFF_PIN, LOW); // serve solo se sto alimentando con usb durante il debug
 }
