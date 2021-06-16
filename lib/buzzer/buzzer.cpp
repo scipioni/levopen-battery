@@ -13,6 +13,9 @@ void buzzer_task(void *parameter)
 {
     uint8_t count, buff;
 
+    //vTaskDelay(pdMS_TO_TICKS(500));
+    buzzer_play(3);
+
     for (;;)
     { // infinite loop
 

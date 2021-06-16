@@ -19,15 +19,16 @@ void Bike::setup()
 {
     led_setup();
     buzzer_setup();
-    buzzer_play(3); // togliere
-
-#if CANBUS_ENABLE == 1
-    canbus_setup();
-#endif
+    //buzzer_play(3); // togliere
 
     setup_ble();
 
     xTaskCreatePinnedToCore(this->notify_task, "notify", 10500, NULL, 5, NULL, ARDUINO_RUNNING_CORE);
+
+#if CANBUS_ENABLE == 1
+    vTaskDelay(pdMS_TO_TICKS(500)); // to avoid brownout
+    canbus_setup();
+#endif
 }
 
 void Bike::poweroff()
@@ -38,9 +39,9 @@ void Bike::poweroff()
 //#if LATCH_MODE == CHANNEL_N
     //digitalWrite(POWER_BUTTON_PIN, LOW);
     buzzer_play(1);
-    //pinMode(BUTTON_PIN, INPUT_PULLDOWN);
-    pinMode(BUTTON_PIN, OUTPUT);
-    digitalWrite(BUTTON_PIN, LOW);
+    pinMode(BUTTON_PIN, INPUT_PULLDOWN);
+    //pinMode(BUTTON_PIN, OUTPUT);
+    //digitalWrite(BUTTON_PIN, LOW);
     
 //#else
 //    pinMode(POWER_BUTTON_PIN, INPUT_PULLDOWN);
@@ -60,7 +61,6 @@ void Bike::notify_task(void *parameter) // questa è statica
     for (;;)
     {
         bike.notify();
-
-        vTaskDelay(BLE_NOTIFY_INTERVAL / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(BLE_NOTIFY_INTERVAL));
     }
 }

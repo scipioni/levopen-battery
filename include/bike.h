@@ -1,5 +1,5 @@
-#define BUZZER_PIN 16
-#define BUTTON_PIN 4 // no PWM on startup
+//#define BUZZER_PIN 16
+#define BUTTON_PIN 27 // no PWM on startup
 #define BATTERY_V_MIN_mV 32000
 #define BATTERY_V_MAX_mV 42000
 #define BATTERY_K 40850 / 288 // empiric: V_battery_mV/mean_pin

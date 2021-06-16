@@ -5,8 +5,8 @@
 
 #define CANBUS_ENABLE 1
 //#define CANBUS_GND_PIN 23 // 22 //16
-#define CANBUS_TX_PIN 14 //19 //4
-#define CANBUS_RX_PIN 12 // 23 //0
+#define CANBUS_TX_PIN 23 //19 //4
+#define CANBUS_RX_PIN 19 // 23 //0
 //#define CANBUS_POWER_PIN 17
 #define LOG_TAG "canbus"
 
