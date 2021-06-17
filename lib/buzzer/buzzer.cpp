@@ -9,11 +9,13 @@ void buzzer_play(int count)
     xQueueSend(xQueueBuzzer, &count, pdMS_TO_TICKS(1));
 }
 
+void buzzer_on() {
+    digitalWrite(BUZZER_PIN, HIGH); // buzzer acceso
+}
+
 void buzzer_task(void *parameter)
 {
     uint8_t count, buff;
-
-    //vTaskDelay(pdMS_TO_TICKS(500));
     buzzer_play(3);
 
     for (;;)

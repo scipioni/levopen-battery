@@ -7,3 +7,4 @@
 
 void buzzer_setup();
 void buzzer_play(int);
+void buzzer_on();
