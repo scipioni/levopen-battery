@@ -3,9 +3,15 @@
 #define BUZZER_PIN 25
 #define BUTTON_PIN 27 // no PWM on startup
 #endif
-#define BATTERY_V_MIN_mV 32000
-#define BATTERY_V_MAX_mV 42000
-#define BATTERY_K 40850 / 288 // empiric: V_battery_mV/mean_pin
+
+#ifdef BOARD_TTGO
+#define BUZZER_PIN 25
+#define BUTTON_PIN 27 // no PWM on startup
+#endif
+
+#define BATTERY_V_MIN_mV 34000
+#define BATTERY_V_MAX_mV 41200
+#define BATTERY_K 41200 / 275 // empiric: V_battery_mV/mean_pin
 
 #include <Arduino.h>
 #include <BLEDevice.h>

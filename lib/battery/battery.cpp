@@ -37,6 +37,7 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 
 #if LATCH_MODE == CHANNEL_N
 	pinMode(sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
+	//pinMode(sensePin, INPUT_PULLDOWN);
 #else
 	pinMode(POWER_BUTTON_PIN, INPUT_PULLUP);
 #endif

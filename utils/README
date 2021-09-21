@@ -1,0 +1,12 @@
+# level 0
+tar --verbose --create --gzip --listed-incremental=data.sngz --file=data.tgz --exclude-from excluded /Home /lab /archive /etc
+
+
+# level1
+tar --verbose --verbose --create --gzip --listed-incremental=/root/metadata/data.sngz --file=data.1.tgz data
+
+
+#restore
+
+tar --extract  --listed-incremental=/dev/null --file data.tgz
+tar --extract  --listed-incremental=/dev/null --file data.1.tgz
