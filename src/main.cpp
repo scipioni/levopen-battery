@@ -9,7 +9,7 @@ void setup()
 
 void loop()
 {
-  if (battery.button())
+  if (battery.button() || battery.idle())
   {
     bike.poweroff();
   }

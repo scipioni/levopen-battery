@@ -3,6 +3,8 @@
 #include "battery.h"
 //#include <Arduino.h>
 
+SemaphoreHandle_t xSemaphoreIdle = NULL;
+
 void pollBattery(void *parameter)
 {
 	Serial.print("waiting for a while to read POWER BUTTON");
@@ -35,15 +37,12 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 	//pinMode(this->sensePin, INPUT);
 	analogReadResolution(9); // 9 bit for max 511
 
-#if LATCH_MODE == CHANNEL_N
 	pinMode(sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
 	//pinMode(sensePin, INPUT_PULLDOWN);
-#else
-	pinMode(POWER_BUTTON_PIN, INPUT_PULLUP);
-#endif
 
 	voltage_mean = 0;
 	current_sample = 0;
+	voltage_mean_old = 0;
 
 	// if (this->activationPin < 0xFF)
 	// {
@@ -53,6 +52,9 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 
 	for (int i = 0; i < V_SAMPLE; i++)
 		voltages[i] = 0;
+
+	xSemaphoreIdle = xSemaphoreCreateMutex();
+	xSemaphoreGive((xSemaphoreIdle));
 
 	xTaskCreate(
 		pollBattery,	// Function that should be called
@@ -83,7 +85,7 @@ uint8_t Battery::capacity()
 
 bool Battery::button()
 {
-	if (! power)
+	if (!power)
 		return false;
 	return button_pressed > 1;
 }
@@ -145,6 +147,9 @@ uint16_t Battery::voltage()
 	voltage_pin_mean = tot / samples_valid;	   // 9 bit resolution 512-1
 	voltage_mean = this->k * voltage_pin_mean; // 9 bit resolution 512-1
 
+	if (voltage_mean_old <= 0)
+		voltage_mean_old = voltage_mean;
+
 	return voltage_mean;
 }
 
@@ -153,4 +158,32 @@ uint16_t Battery::readButtonPin()
 	uint16_t value = analogRead(sensePin);
 	pinMode(sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
 	return value;
+}
+
+void Battery::resetIdle(void)
+{
+	xSemaphoreTake(xSemaphoreIdle, portMAX_DELAY);
+	this->idle_poweroff = 0;
+	xSemaphoreGive(xSemaphoreIdle);
+}
+
+bool Battery::idle(void)
+{
+	if (!power)
+		return false;
+	xSemaphoreTake(xSemaphoreIdle, portMAX_DELAY);
+	this->idle_poweroff++;
+	xSemaphoreGive(xSemaphoreIdle);
+	if (this->idle_poweroff > IDLE_POWEROFF)
+	{
+		Serial.printf("idle detected...\n");
+		if (voltage_mean <= voltage_mean_old)
+		{
+			return true;
+		} 
+		voltage_mean_old = voltage_mean;
+		Serial.printf("but battery is charging\n");
+		resetIdle();
+	}
+	return false;
 }

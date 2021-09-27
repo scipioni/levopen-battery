@@ -14,7 +14,7 @@
 #define V_BUTTON_TRIGGER 250
 //#define POWER_BUTTON_PIN 4
 #define POWER_BUTTON_DELAY 2000 // ms
-#define LATCH_MODE CHANNEL_N
+#define IDLE_POWEROFF 300 // sec
 
 //#define DEBUG_BATTERY
 
@@ -66,7 +66,10 @@ public:
 	uint8_t button_pressed;
 	uint16_t voltage_pin_mean;
     bool power = true;
+	void resetIdle(void);
+	bool idle(void);
 private:
+	uint16_t idle_poweroff = 0;
 	uint16_t minVoltage;
 	uint16_t maxVoltage;
 	float k;
@@ -75,6 +78,7 @@ private:
 	// uint8_t activationMode;
 	mapFn_t mapFunction;
 	uint16_t voltage_mean;
+	uint16_t voltage_mean_old;
 	uint16_t voltages[V_SAMPLE];
 	uint8_t current_sample;
 	uint16_t readButtonPin();

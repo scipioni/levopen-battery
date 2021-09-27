@@ -2,6 +2,7 @@
 
 #include "canbus.h"
 #include "buzzer.h"
+#include "battery.h"
 
 CAN_device_t CAN_cfg;         // CAN Config
 //const int rx_queue_size = 10; // Receive Queue size
@@ -146,7 +147,7 @@ void canbus_receive_task(void *pvParameter)
   {
     if (xQueueReceive(CAN_cfg.rx_queue, &rx_frame, portMAX_DELAY) == pdTRUE)
     {
-      if (rx_frame.MsgID == 0x454) // dal motore 0x454 o dalla batteria 0x300)
+      if (rx_frame.MsgID == 0x454) // from motor 0x454 or from battery 0x300)
       {
         if (!motor_is_alive)
         {
@@ -189,6 +190,10 @@ void canbus_receive_task(void *pvParameter)
               }
             }
           }
+        }
+      } else if (rx_frame.MsgID == 0x201) { // from motor 0x201 velocity payload
+        if (rx_frame.data.u8[0] || rx_frame.data.u8[1]) { // velocity > 0, bike is moving
+          battery.resetIdle();
         }
       }
     }
