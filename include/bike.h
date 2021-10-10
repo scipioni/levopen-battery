@@ -10,8 +10,8 @@
 #endif
 
 #define BATTERY_V_MIN_mV 34000
-#define BATTERY_V_MAX_mV 41200
-#define BATTERY_K 41200 / 275 // empiric: V_battery_mV/mean_pin
+#define BATTERY_V_MAX_mV 41000
+#define BATTERY_K 40800 / 301 // empiric: V_battery_mV/mean_pin
 
 #include <Arduino.h>
 #include <BLEDevice.h>
