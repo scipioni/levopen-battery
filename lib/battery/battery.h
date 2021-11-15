@@ -14,8 +14,8 @@
 #define V_BUTTON_TRIGGER 200
 //#define POWER_BUTTON_PIN 4
 #define POWER_BUTTON_DELAY 2000 // ms
-#define IDLE_POWEROFF 300 // sec
-
+#define IDLE_POWEROFF_MOTOR 300 // sec
+#define IDLE_POWEROFF_CHARGING 3600*4 // sec
 //#define DEBUG_BATTERY
 
 typedef uint8_t (*mapFn_t)(uint16_t, uint16_t, uint16_t);
@@ -66,6 +66,7 @@ public:
 	uint8_t button_pressed;
 	uint16_t voltage_pin_mean;
     bool power = true;
+	bool motor_is_alive = false;
 	void resetIdle(void);
 	bool idle(void);
 private:

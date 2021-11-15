@@ -167,23 +167,28 @@ void Battery::resetIdle(void)
 	xSemaphoreGive(xSemaphoreIdle);
 }
 
-bool Battery::idle(void)
+
+bool Battery::idle(void) // chiamato dal main ogni secondo
 {
 	if (!power)
 		return false;
 	xSemaphoreTake(xSemaphoreIdle, portMAX_DELAY);
 	this->idle_poweroff++;
 	xSemaphoreGive(xSemaphoreIdle);
-	if (this->idle_poweroff > IDLE_POWEROFF)
+	if (!this->motor_is_alive	&& this->idle_poweroff > IDLE_POWEROFF_CHARGING){ // sono in carica da 4 ore, spengo
+		return true;
+	}
+	if (this->motor_is_alive && this->idle_poweroff > IDLE_POWEROFF_MOTOR) // motore acceso ma fermo da 5 minuti, spengo
 	{
-		Serial.printf("idle detected...\n");
-		if (voltage_mean <= voltage_mean_old)
-		{
-			return true;
-		} 
-		voltage_mean_old = voltage_mean;
-		Serial.printf("but battery is charging\n");
-		resetIdle();
+		return true;
+		// Serial.printf("idle detected...\n");
+		// if (voltage_mean <= voltage_mean_old)
+		// {
+		// 	return true;
+		// } 
+		// voltage_mean_old = voltage_mean;
+		// Serial.printf("but battery is charging\n");
+		// resetIdle();
 	}
 	return false;
 }

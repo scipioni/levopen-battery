@@ -141,7 +141,7 @@ void canbus_receive_task(void *pvParameter)
   //twai_message_t rx_msg;
   CAN_frame_t rx_frame;
   uint8_t button;
-  bool motor_is_alive = false;
+  //bool motor_is_alive = false;
 
   for (;;)
   {
@@ -149,9 +149,10 @@ void canbus_receive_task(void *pvParameter)
     {
       if (rx_frame.MsgID == 0x454) // from motor 0x454 or from battery 0x300)
       {
-        if (!motor_is_alive)
+        if (!battery.motor_is_alive)
         {
-          motor_is_alive = true;
+          //motor_is_alive = true;
+          battery.motor_is_alive = true;
           buzzer_play(tx_assistance->buzzer);
         }
         button = rx_frame.data.u8[6];
