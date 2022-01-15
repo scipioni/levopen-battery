@@ -11,7 +11,7 @@
 //#define BATTERY_V_MAX_mV 42000
 //#define BATTERY_K 40800/244 // empiric: Vbattery_mV/last
 #define V_POLL_INTERVAL 1000 //
-#define V_BUTTON_TRIGGER 200
+#define V_BUTTON_TRIGGER 140
 //#define POWER_BUTTON_PIN 4
 #define POWER_BUTTON_DELAY 2000 // ms
 #define IDLE_POWEROFF_MOTOR 300 // sec

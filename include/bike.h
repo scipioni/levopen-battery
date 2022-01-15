@@ -9,9 +9,9 @@
 #define BUTTON_PIN 27 // no PWM on startup
 #endif
 
-#define BATTERY_V_MIN_mV 34000
+#define BATTERY_V_MIN_mV 33000
 #define BATTERY_V_MAX_mV 41000
-#define BATTERY_K 40800 / 301 // empiric: V_battery_mV/mean_pin
+#define BATTERY_K 40600 / 195 // empiric: V_battery_mV/mean_pin
 
 #include <Arduino.h>
 #include <BLEDevice.h>

@@ -37,7 +37,7 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 	//pinMode(this->sensePin, INPUT);
 	analogReadResolution(9); // 9 bit for max 511
 
-	pinMode(sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
+	pinMode(this->sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
 	//pinMode(sensePin, INPUT_PULLDOWN);
 
 	voltage_mean = 0;
@@ -117,9 +117,9 @@ uint16_t Battery::voltage()
 	{
 		totalValue += readButtonPin();
 	}
-	voltage_last = totalValue / V_SAMPLE;
+	this->voltage_last = totalValue / V_SAMPLE;
 
-	if (voltage_last < V_BUTTON_TRIGGER)
+	if (this->voltage_last < V_BUTTON_TRIGGER)
 	{
 		button_pressed++;
 		return voltage_mean; // non sporchiamo le medie
@@ -129,7 +129,7 @@ uint16_t Battery::voltage()
 		button_pressed = 0;
 	}
 
-	voltages[current_sample++] = voltage_last;
+	voltages[current_sample++] = this->voltage_last;
 
 	long tot = 0;
 	int samples_valid = 0;

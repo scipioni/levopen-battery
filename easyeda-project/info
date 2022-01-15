@@ -4,7 +4,7 @@
   "name": "open-ebike-latch",
   "content": "",
   "created_at": "2021-05-14 16:53:20",
-  "updated_at": "2021-09-21 19:40:35",
+  "updated_at": "2022-01-15 14:51:33",
   "stick": "",
   "documents": [
     {
@@ -12,7 +12,7 @@
       "title": "Sheet_1",
       "description": "",
       "docType": "1",
-      "master": "",
+      "master": "bcc2b60fb4ea6153b061b31d9ab7d521",
       "thumb": "/images/thumb-default.png",
       "components": {
         "5f744dbaf631465382083d00a5a7d69f": 1,
@@ -357,9 +357,9 @@
         ],
         [
           "10k",
-          3,
+          2,
           "R_AXIAL-0.4",
-          "R4,R6,R7",
+          "R4,R7",
           {
             "BOM_Supplier Part": "",
             "BOM_Supplier": "",
@@ -373,6 +373,19 @@
           1,
           "R_AXIAL-0.4",
           "R5",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "5905db98cde4487fbb177070aa85bbe1",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "1k",
+          1,
+          "R_AXIAL-0.4",
+          "R6",
           {
             "BOM_Supplier Part": "",
             "BOM_Supplier": "",
@@ -409,11 +422,11 @@
           }
         ]
       ],
-      "updateTime": 1632244738,
+      "updateTime": 1642254693,
       "createTime": 1621005488,
       "histories": [],
       "created_at": "2021-05-14 17:18:08",
-      "updated_at": "2021-09-21 19:18:58"
+      "updated_at": "2022-01-15 14:51:33"
     },
     {
       "uuid": "8cab8c39f25c4f1ea2b1233edb17bc32",
@@ -451,5 +464,5 @@
   "title": "open-ebike-latch",
   "foldername": "open-ebike-latch",
   "schfilename": "open-ebike-latch.json",
-  "schfilemtime": 1632244738265
+  "schfilemtime": 1642254693751
 }
