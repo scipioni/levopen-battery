@@ -2,16 +2,26 @@
 #ifdef BOARD_WEMOS_D1_MINI32
 #define BUZZER_PIN 25
 #define BUTTON_PIN 27 // no PWM on startup
+#define BATTERY_K 36370 / 279 // empiric: V_battery_mV/mean_pin
 #endif
 
 #ifdef BOARD_TTGO
-#define BUZZER_PIN 25
+#define BUZZER_PIN 25  // per la prima
+//#define BUZZER_PIN 33
 #define BUTTON_PIN 27 // no PWM on startup
+#define BATTERY_K 36370 / 279 // empiric: V_battery_mV/mean_pin
 #endif
 
-#define BATTERY_V_MIN_mV 33000
+#ifdef BOARD_DOIT
+#define BUZZER_PIN 25  // per la prima
+#define BUTTON_PIN 27 // no PWM on startup
+#define BATTERY_K 41240 / 304 // empiric: V_battery_mV/mean_pin
+#endif
+
+
+#define BATTERY_V_MIN_mV 30000
 #define BATTERY_V_MAX_mV 41000
-#define BATTERY_K 40600 / 195 // empiric: V_battery_mV/mean_pin
+//#define BATTERY_K 36370 / 279 // empiric: V_battery_mV/mean_pin
 
 #include <Arduino.h>
 #include <BLEDevice.h>

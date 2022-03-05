@@ -200,7 +200,15 @@ void canbus_receive_task(void *pvParameter)
     }
   }
 }
+// void canbus_setup_test()
+// {
+// pinMode(CANBUS_TX_PIN, OUTPUT);
+// digitalWrite(CANBUS_TX_PIN, HIGH);
 
+// pinMode(CANBUS_RX_PIN, OUTPUT);
+// digitalWrite(CANBUS_RX_PIN, HIGH);
+
+// }
 void canbus_setup()
 {
   CAN_cfg.speed = CAN_SPEED_250KBPS;

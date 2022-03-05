@@ -4,7 +4,7 @@
   "name": "open-ebike-latch",
   "content": "",
   "created_at": "2021-05-14 16:53:20",
-  "updated_at": "2022-01-15 14:51:33",
+  "updated_at": "2022-02-27 19:43:54",
   "stick": "",
   "documents": [
     {
@@ -12,7 +12,7 @@
       "title": "Sheet_1",
       "description": "",
       "docType": "1",
-      "master": "bcc2b60fb4ea6153b061b31d9ab7d521",
+      "master": "",
       "thumb": "/images/thumb-default.png",
       "components": {
         "5f744dbaf631465382083d00a5a7d69f": 1,
@@ -28,8 +28,7 @@
         "3e67cc4e74ef40aaaa79aef10ce7a3e4": 1,
         "f96aa2d1affc41a39a6fdea1a78d42f9": 1,
         "8fc54ec6dadb4abba9f257dbcb08e919": 1,
-        "6004427743dbdd555d6b794af143fe13": 1,
-        "e33cc1be9d5e4d929dda60b4eb023d72": 1,
+        "e33cc1be9d5e4d929dda60b4eb023d72": 2,
         "5cbe824183374fac8e4c1ae848199ce3": 1
       },
       "BOM": [
@@ -97,24 +96,9 @@
         ],
         [
           "1N4007W",
-          1,
+          2,
           "DO-35_BD2.0-L4.2-P8.20-D0.5-RD",
-          "D2",
-          {
-            "BOM_Supplier": "LCSC",
-            "BOM_Manufacturer Part": "1N4007W",
-            "BOM_Manufacturer": "SEMTECH",
-            "BOM_Supplier Part": "C14516",
-            "BOM_JLCPCB Part Class": "Extended Part",
-            "puuid": "6c939f0b67d24ba88150ca5feca61f68",
-            "uuid": "6004427743dbdd555d6b794af143fe13"
-          }
-        ],
-        [
-          "1N4007W",
-          1,
-          "DO-35_BD2.0-L4.2-P8.20-D0.5-RD",
-          "D3",
+          "D2,D3",
           {
             "BOM_Supplier": "LCSC",
             "BOM_Supplier Part": "C328592",
@@ -422,11 +406,11 @@
           }
         ]
       ],
-      "updateTime": 1642254693,
+      "updateTime": 1645895399,
       "createTime": 1621005488,
       "histories": [],
       "created_at": "2021-05-14 17:18:08",
-      "updated_at": "2022-01-15 14:51:33"
+      "updated_at": "2022-02-26 18:09:59"
     },
     {
       "uuid": "8cab8c39f25c4f1ea2b1233edb17bc32",
@@ -449,20 +433,20 @@
         "5905db98cde4487fbb177070aa85bbe1": 8,
         "180a0bc5b5f4484e93115dcea3684966": 1,
         "24f74b0167c64dc4ac260307a6a9fe17": 1,
-        "6a8cc0d167d04926a8ac5a757ba65780": 2,
-        "ec56681bb78242aa9f19b9f8a33c5b4d": 1
+        "ec56681bb78242aa9f19b9f8a33c5b4d": 1,
+        "6a8cc0d167d04926a8ac5a757ba65780": 2
       },
       "BOM": [],
-      "updateTime": 1632246035,
+      "updateTime": 1645987434,
       "createTime": 1621009407,
       "histories": [],
       "created_at": "2021-05-14 18:23:27",
-      "updated_at": "2021-09-21 19:40:35"
+      "updated_at": "2022-02-27 19:43:54"
     }
   ],
   "sort": [],
   "title": "open-ebike-latch",
   "foldername": "open-ebike-latch",
   "schfilename": "open-ebike-latch.json",
-  "schfilemtime": 1642254693751
+  "schfilemtime": 1645895399553
 }

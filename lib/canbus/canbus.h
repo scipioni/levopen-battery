@@ -8,6 +8,13 @@
 #define CANBUS_TX_PIN 17 //23 //19 //4
 #define CANBUS_RX_PIN 16 //19 // 23 //0
 //#define CANBUS_POWER_PIN 17
+
+#ifdef BOARD_DOIT
+#define CANBUS_TX_PIN 17
+#define CANBUS_RX_PIN 16
+#endif
+
+
 #define LOG_TAG "canbus"
 
 typedef struct TX_FRAME
