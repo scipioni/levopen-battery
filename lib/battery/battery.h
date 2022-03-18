@@ -4,6 +4,7 @@
 #define BATTERY_H_
 
 #include <Arduino.h>
+#include <movingAvg.h>
 
 #define V_SAMPLE 30 // how many values use for mean value
 //#define BUTTON_PIN 12
@@ -13,7 +14,7 @@
 #define V_POLL_INTERVAL 1000 //
 
 #ifdef BOARD_TTGO
-#define V_BUTTON_TRIGGER 180
+#define V_BUTTON_TRIGGER 120
 #endif
 
 #ifdef BOARD_DOIT
@@ -68,29 +69,30 @@ public:
 	uint16_t voltage();
 
 	bool button();
-	void debug();
 
-	uint16_t voltage_last;
+	uint16_t voltage_last = 0;
 	uint8_t button_pressed;
 	uint16_t voltage_pin_mean;
     bool power = true;
 	bool motor_is_alive = false;
 	void resetIdle(void);
 	bool idle(void);
-private:
-	uint16_t idle_poweroff = 0;
 	uint16_t minVoltage;
 	uint16_t maxVoltage;
+private:
+	uint16_t idle_poweroff = 0;
+
 	float k;
 	uint8_t sensePin;
 	// uint8_t activationPin;
 	// uint8_t activationMode;
 	mapFn_t mapFunction;
 	uint16_t voltage_mean;
-	uint16_t voltage_mean_old;
-	uint16_t voltages[V_SAMPLE];
-	uint8_t current_sample;
+	//uint16_t voltage_mean_old;
+	//uint16_t voltages[V_SAMPLE];
+	//uint8_t current_sample;
 	uint16_t readButtonPin();
+	movingAvg voltageAvg = movingAvg(V_SAMPLE); 
 };
 
 //

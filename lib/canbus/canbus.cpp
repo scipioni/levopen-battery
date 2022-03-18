@@ -4,10 +4,13 @@
 #include "buzzer.h"
 #include "battery.h"
 
-CAN_device_t CAN_cfg;         // CAN Config
-//const int rx_queue_size = 10; // Receive Queue size
-//unsigned long previousMillis = 0; // will store last time a CAN Message was send
-//const int interval = 1000;        // interval at which send CAN Messages (milliseconds)
+#define WALK 0xA5
+#define WALK_OFF 0x5A
+
+CAN_device_t CAN_cfg; // CAN Config
+// const int rx_queue_size = 10; // Receive Queue size
+// unsigned long previousMillis = 0; // will store last time a CAN Message was send
+// const int interval = 1000;        // interval at which send CAN Messages (milliseconds)
 
 PLEVELS powers[3] = {
     {.mean = 0x1E, .max = 0x23, .code = 0x06, .buzzer = 1},
@@ -16,7 +19,7 @@ PLEVELS powers[3] = {
 
 SETTINGS settings = {.running = true, .motor_is_alive = false, .initial_assistance = 0};
 
-//QueueHandle_t xQueueBuzzer = NULL;
+// QueueHandle_t xQueueBuzzer = NULL;
 #define MESSAGES_OUT 4
 TX_FRAME messages_out[MESSAGES_OUT];
 TX_FRAME tx_assistances[3];
@@ -36,8 +39,8 @@ void initialize_assistance(TX_FRAME *tx, PLEVELS *plevel)
   tx->message.data.u8[5] = 0x00;
   tx->message.data.u8[6] = plevel->max;
 
-  //0x5A, 0x0B, 0x5A, plevel->mean, 0x00, plevel->max}};
-  //tx->message = (CAN_frame_t){.FIR.B.DLC = 7, .MsgID = 0x300, .data.u8 = {0x03, 0x5A, 0x0B, 0x5A, plevel->mean, 0x00, plevel->max}}; // {0x03,0x5A,0x0B,0x5A,0x1E,0x00,0x23}
+  // 0x5A, 0x0B, 0x5A, plevel->mean, 0x00, plevel->max}};
+  // tx->message = (CAN_frame_t){.FIR.B.DLC = 7, .MsgID = 0x300, .data.u8 = {0x03, 0x5A, 0x0B, 0x5A, plevel->mean, 0x00, plevel->max}}; // {0x03,0x5A,0x0B,0x5A,0x1E,0x00,0x23}
 }
 
 void canbus_300_task(void *pvParameter)
@@ -72,7 +75,7 @@ void canbus_400_task(void *pvParameter)
   for (;;)
   {
     ESP_LOGD(LOG_TAG, "tx: id=%03x", tx.message.MsgID);
-    //Serial.printf("tx: id=%03x\n", tx.message.MsgID);
+    // Serial.printf("tx: id=%03x\n", tx.message.MsgID);
     ESP32Can.CANWriteFrame(&tx.message);
     vTaskDelay(pdMS_TO_TICKS(tx.interval));
   }
@@ -130,7 +133,7 @@ void canbus_451_task(void *pvParameter)
     if (++current >= MESSAGES_OUT)
     {
       current = 0;
-      //xSemaphoreGive(xSemaphore300); // now transmit 300
+      // xSemaphoreGive(xSemaphore300); // now transmit 300
     }
   }
 }
@@ -138,10 +141,8 @@ void canbus_451_task(void *pvParameter)
 void canbus_receive_task(void *pvParameter)
 {
   int transition = 0;
-  //twai_message_t rx_msg;
   CAN_frame_t rx_frame;
-  uint8_t button;
-  //bool motor_is_alive = false;
+  uint8_t button, walk_button;
 
   for (;;)
   {
@@ -151,12 +152,12 @@ void canbus_receive_task(void *pvParameter)
       {
         if (!battery.motor_is_alive)
         {
-          //motor_is_alive = true;
+          // motor_is_alive = true;
           battery.motor_is_alive = true;
           buzzer_play(tx_assistance->buzzer);
         }
         button = rx_frame.data.u8[6];
-        if (button == 0x0A || button == 0x0E)
+        if (button == 0x0A || button == 0x0E) //  button + or -
         {
           if (transition > 0)
           {
@@ -182,8 +183,6 @@ void canbus_receive_task(void *pvParameter)
                 {
                   transition = tx_assistance->message.data.u8[6]; // save value
                   tx_assistance->message.data.u8[6] = button;     // send 0E
-                                                                  // } else {
-                                                                  //     buzzer(tx_assistance->buzzer);
                 }
 
                 xSemaphoreGive(xSemaphoreTx);
@@ -192,14 +191,25 @@ void canbus_receive_task(void *pvParameter)
             }
           }
         }
-      } else if (rx_frame.MsgID == 0x201) { // from motor 0x201 velocity payload
-        if (rx_frame.data.u8[0] || rx_frame.data.u8[1]) { // velocity > 0, bike is moving
+        walk_button = rx_frame.data.u8[1];
+        if (tx_assistance->message.data.u8[1] != walk_button)
+        {
+          xSemaphoreTake(xSemaphoreTx, portMAX_DELAY);
+          tx_assistance->message.data.u8[1] = (walk_button == WALK ? WALK : WALK_OFF);
+          xSemaphoreGive(xSemaphoreTx);
+        }
+      }
+      else if (rx_frame.MsgID == 0x201)
+      { // from motor 0x201 velocity payload
+        if (rx_frame.data.u8[0] || rx_frame.data.u8[1])
+        { // velocity > 0, bike is moving
           battery.resetIdle();
         }
       }
     }
   }
 }
+
 // void canbus_setup_test()
 // {
 // pinMode(CANBUS_TX_PIN, OUTPUT);
@@ -209,6 +219,7 @@ void canbus_receive_task(void *pvParameter)
 // digitalWrite(CANBUS_RX_PIN, HIGH);
 
 // }
+
 void canbus_setup()
 {
   CAN_cfg.speed = CAN_SPEED_250KBPS;
@@ -222,11 +233,11 @@ void canbus_setup()
   // pinMode(CANBUS_GND_PIN, OUTPUT);
   // digitalWrite(CANBUS_GND_PIN, LOW);
 
-  //pinMode(CANBUS_POWER_PIN, OUTPUT);
-  //digitalWrite(CANBUS_POWER_PIN, HIGH);
+  // pinMode(CANBUS_POWER_PIN, OUTPUT);
+  // digitalWrite(CANBUS_POWER_PIN, HIGH);
 
   vTaskDelay(pdMS_TO_TICKS(30));
- // esp_log_level_set("*", ESP_LOG_DEBUG);  
+  // esp_log_level_set("*", ESP_LOG_DEBUG);
   ESP32Can.CANInit();
 
   xTaskCreate(&canbus_300_task, "canbus_300_task", 2048, NULL, 5, NULL);

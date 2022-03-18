@@ -9,13 +9,14 @@
 #define BUZZER_PIN 25  // per la prima
 //#define BUZZER_PIN 33
 #define BUTTON_PIN 27 // no PWM on startup
-#define BATTERY_K 36370 / 279 // empiric: V_battery_mV/mean_pin
+#define BATTERY_K 41130 / 301 // empiric: V_battery_mV/mean_pin
 #endif
 
 #ifdef BOARD_DOIT
 #define BUZZER_PIN 25  // per la prima
 #define BUTTON_PIN 27 // no PWM on startup
-#define BATTERY_K 41240 / 304 // empiric: V_battery_mV/mean_pin
+//#define BATTERY_K 41240 / 304 // empiric: V_battery_mV/mean_pin (battery 500wh)
+#define BATTERY_K 40490 / 272 // empiric: V_battery_mV/mean_pin (battery 750wh)
 #endif
 
 

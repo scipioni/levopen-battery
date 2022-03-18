@@ -10,8 +10,8 @@
 //#define CANBUS_POWER_PIN 17
 
 #ifdef BOARD_DOIT
-#define CANBUS_TX_PIN 17
-#define CANBUS_RX_PIN 16
+#define CANBUS_TX_PIN 17 // GPIO17
+#define CANBUS_RX_PIN 16 // GPIO16 
 #endif
 
 

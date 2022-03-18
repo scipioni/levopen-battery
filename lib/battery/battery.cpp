@@ -1,6 +1,7 @@
 // https://github.com/rlogiacco/BatterySense
 
 #include "battery.h"
+
 //#include <Arduino.h>
 
 SemaphoreHandle_t xSemaphoreIdle = NULL;
@@ -13,10 +14,11 @@ void pollBattery(void *parameter)
 	{ // infinite loop
 		vTaskDelay(V_POLL_INTERVAL);
 		if (battery.power)
-			Serial.printf("Battery mean=%dmV mean_pin=%d last=%d capacity=%d%%: button=%d\n",
+			Serial.printf("Battery mean=%dmV mean_pin=%d last=%d min=%d capacity=%d%%: button=%d\n",
 						  battery.voltage(),
 						  battery.voltage_pin_mean,
 						  battery.voltage_last,
+						  battery.minVoltage,
 						  battery.capacity(),
 						  battery.button_pressed);
 
@@ -28,21 +30,22 @@ void pollBattery(void *parameter)
 
 Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sensePin)
 {
+	voltageAvg.begin();
 	button_pressed = 0;
 	this->k = k;
 	this->sensePin = sensePin;
-	//this->activationPin = 0xFF;
+	// this->activationPin = 0xFF;
 	this->minVoltage = minVoltage;
 	this->maxVoltage = maxVoltage;
-	//pinMode(this->sensePin, INPUT);
+	// pinMode(this->sensePin, INPUT);
 	analogReadResolution(9); // 9 bit for max 511
 
 	pinMode(this->sensePin, INPUT_PULLUP); // analogRead attaches the pin to ADC channel, which remaps it off the PU circuit. You have to set the mode back to INPUT_PULLUP after the read,
-	//pinMode(sensePin, INPUT_PULLDOWN);
+	// pinMode(sensePin, INPUT_PULLDOWN);
 
 	voltage_mean = 0;
-	current_sample = 0;
-	voltage_mean_old = 0;
+	//current_sample = 0;
+	// voltage_mean_old = 0;
 
 	// if (this->activationPin < 0xFF)
 	// {
@@ -50,8 +53,8 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 	// }
 	this->mapFunction = (mapFunction ? mapFunction : &sigmoidal);
 
-	for (int i = 0; i < V_SAMPLE; i++)
-		voltages[i] = 0;
+	// for (int i = 0; i < V_SAMPLE; i++)
+	// 	voltages[i] = 0;
 
 	xSemaphoreIdle = xSemaphoreCreateMutex();
 	xSemaphoreGive((xSemaphoreIdle));
@@ -64,7 +67,7 @@ Battery::Battery(float k, uint16_t minVoltage, uint16_t maxVoltage, uint8_t sens
 		1,				// Task priority
 		NULL			// Task handle
 	);
-	//printf("battery initialized")
+	// printf("battery initialized")
 }
 
 uint8_t Battery::capacity()
@@ -90,13 +93,6 @@ bool Battery::button()
 	return button_pressed > 1;
 }
 
-void Battery::debug()
-{
-	Serial.printf("current=%d   values=", current_sample);
-	for (int i = 0; i < V_SAMPLE; i++)
-		Serial.printf("%d ", voltages[i]);
-	Serial.println("");
-}
 
 uint16_t Battery::voltage()
 {
@@ -108,16 +104,29 @@ uint16_t Battery::voltage()
 	// 	battery.debug();
 	// }
 
-	if (current_sample >= V_SAMPLE)
-		current_sample = 0;
-	//voltage_last = readButtonPin();
+	// if (current_sample >= V_SAMPLE)
+	// 	current_sample = 0;
+	// voltage_last = readButtonPin();
 
-	int totalValue = 0;
-	for (int i = 0; i < V_SAMPLE; i++)
+	// int totalValue = 0;
+	// for (int i = 0; i < V_SAMPLE; i++)
+	// {
+	// 	totalValue += readButtonPin();
+	// }
+	// this->voltage_last = totalValue / V_SAMPLE;
+
+	if (this->voltage_last == 0) // precharge mean
 	{
-		totalValue += readButtonPin();
+		this->voltage_last = readButtonPin();
+		for (int i = 0; i < V_SAMPLE; i++) {
+			//delay(10);
+			voltageAvg.reading(270);
+		}
 	}
-	this->voltage_last = totalValue / V_SAMPLE;
+	else
+	{
+		this->voltage_last = readButtonPin();
+	}
 
 	if (this->voltage_last < V_BUTTON_TRIGGER)
 	{
@@ -129,26 +138,29 @@ uint16_t Battery::voltage()
 		button_pressed = 0;
 	}
 
-	voltages[current_sample++] = this->voltage_last;
+	this->voltageAvg.reading(this->voltage_last);
 
-	long tot = 0;
-	int samples_valid = 0;
-	for (int i = 0; i < V_SAMPLE; i++)
-	{
-		if (voltages[i] > 0)
-		{
-			tot += voltages[i];
-			samples_valid++;
-		}
-	}
-	if (samples_valid == 0)
-		return 0;
+	// voltages[current_sample++] = this->voltage_last;
 
-	voltage_pin_mean = tot / samples_valid;	   // 9 bit resolution 512-1
+	// long tot = 0;
+	// int samples_valid = 0;
+	// for (int i = 0; i < V_SAMPLE; i++)
+	// {
+	// 	if (voltages[i] > 0)
+	// 	{
+	// 		tot += voltages[i];
+	// 		samples_valid++;
+	// 	}
+	// }
+	// if (samples_valid == 0)
+	// 	return 0;
+
+	// voltage_pin_mean = tot / samples_valid;	   // 9 bit resolution 512-1
+	voltage_pin_mean = this->voltageAvg.getAvg();
 	voltage_mean = this->k * voltage_pin_mean; // 9 bit resolution 512-1
 
-	if (voltage_mean_old <= 0)
-		voltage_mean_old = voltage_mean;
+	// if (voltage_mean_old <= 0)
+	// 	voltage_mean_old = voltage_mean;
 
 	return voltage_mean;
 }
@@ -167,7 +179,6 @@ void Battery::resetIdle(void)
 	xSemaphoreGive(xSemaphoreIdle);
 }
 
-
 bool Battery::idle(void) // chiamato dal main ogni secondo
 {
 	if (!power)
@@ -175,7 +186,8 @@ bool Battery::idle(void) // chiamato dal main ogni secondo
 	xSemaphoreTake(xSemaphoreIdle, portMAX_DELAY);
 	this->idle_poweroff++;
 	xSemaphoreGive(xSemaphoreIdle);
-	if (!this->motor_is_alive	&& this->idle_poweroff > IDLE_POWEROFF_CHARGING){ // sono in carica da 4 ore, spengo
+	if (!this->motor_is_alive && this->idle_poweroff > IDLE_POWEROFF_CHARGING)
+	{ // sono in carica da 4 ore, spengo
 		return true;
 	}
 	if (this->motor_is_alive && this->idle_poweroff > IDLE_POWEROFF_MOTOR) // motore acceso ma fermo da 5 minuti, spengo
@@ -185,7 +197,7 @@ bool Battery::idle(void) // chiamato dal main ogni secondo
 		// if (voltage_mean <= voltage_mean_old)
 		// {
 		// 	return true;
-		// } 
+		// }
 		// voltage_mean_old = voltage_mean;
 		// Serial.printf("but battery is charging\n");
 		// resetIdle();
