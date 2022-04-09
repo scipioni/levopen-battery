@@ -4,7 +4,7 @@
   "name": "open-ebike-latch",
   "content": "",
   "created_at": "2021-05-14 16:53:20",
-  "updated_at": "2022-02-27 19:43:54",
+  "updated_at": "2022-04-09 08:33:18",
   "stick": "",
   "documents": [
     {
@@ -15,21 +15,22 @@
       "master": "",
       "thumb": "/images/thumb-default.png",
       "components": {
-        "5f744dbaf631465382083d00a5a7d69f": 1,
         "1ca5b3485d794946a58b4a6a97f188d8": 1,
         "407d98193d064bf7903b33419cba2d5b": 1,
         "f6b4b52776114275b2cdb7a79b312dd3": 1,
         "404aa9221ff94de597b8734806e7c74f": 6,
         "486123a4bb814705bb1a3164561bb535": 8,
         "3ec77201bbcd4ecd8722658d581a4e60": 2,
-        "a1bddaea90b44e109a38e04d658aabfb": 2,
-        "2ad6f06aa0fe499689c95d07a97acff0": 1,
-        "483f901865fe47dc8c7dc87117403881": 1,
         "3e67cc4e74ef40aaaa79aef10ce7a3e4": 1,
         "f96aa2d1affc41a39a6fdea1a78d42f9": 1,
         "8fc54ec6dadb4abba9f257dbcb08e919": 1,
-        "e33cc1be9d5e4d929dda60b4eb023d72": 2,
-        "5cbe824183374fac8e4c1ae848199ce3": 1
+        "e33cc1be9d5e4d929dda60b4eb023d72": 1,
+        "ebefddbbf38c45159739f1d459dfa367": 1,
+        "86ae71e200f755f3acabed7e69110431": 1,
+        "24eeb2ceca08480b92b847b6a310acda": 2,
+        "51e69560ca3640ce948b248a154d5377": 1,
+        "42e585e262af4a13894feaba4cb5df99": 1,
+        "c1dfae7d2fa24f86934d72ce7f9e984d": 1
       },
       "BOM": [
         [
@@ -392,7 +393,20 @@
           }
         ],
         [
-          "LM2575HVS-5.0",
+          "1k",
+          1,
+          "R0603",
+          "R9",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "398691f1f785460098bbe5ee6590333c",
+            "uuid": "bb009484ef804a24ac5d18c54b249586"
+          }
+        ],
+        [
+          "LM2596HVS-3.3",
           1,
           "TO-263-5_L10.2-W8.9-P1.70-BR",
           "U1",
@@ -404,13 +418,396 @@
             "puuid": "5f4446a0b9e4456bad8298eaa4ce9dc4",
             "uuid": "5f744dbaf631465382083d00a5a7d69f"
           }
+        ],
+        [
+          "330uF",
+          1,
+          "CAP-D5.0×F2.0",
+          "C2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C445051",
+            "BOM_Manufacturer": "Nichicon",
+            "BOM_Manufacturer Part": "UWX0J331MCL1GB",
+            "puuid": "9ab4ba27487f4e968ec8c676394520e2",
+            "uuid": "3e67cc4e74ef40aaaa79aef10ce7a3e4"
+          }
+        ],
+        [
+          "4.7u",
+          1,
+          "CAP-D5.0×F2.0",
+          "C3",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "9ab4ba27487f4e968ec8c676394520e2",
+            "uuid": "8fc54ec6dadb4abba9f257dbcb08e919"
+          }
+        ],
+        [
+          "1n",
+          2,
+          "C1210",
+          "C5,C6",
+          {
+            "BOM_Supplier Part": "C2830702",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "2ff699914e4849dc8fa1384e78f43943",
+            "uuid": "24eeb2ceca08480b92b847b6a310acda"
+          }
+        ],
+        [
+          "1N4007W",
+          1,
+          "DO-35_BD2.0-L4.2-P8.20-D0.5-RD",
+          "D2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C328592",
+            "BOM_Manufacturer": "BLUE ROCKET",
+            "BOM_Manufacturer Part": "1N4007W",
+            "puuid": "6c939f0b67d24ba88150ca5feca61f68",
+            "uuid": "e33cc1be9d5e4d929dda60b4eb023d72"
+          }
+        ],
+        [
+          "SD103AW_C397612",
+          1,
+          "SOD-123_L2.6-W1.6-LS3.5-RD",
+          "D4",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C397612",
+            "BOM_Manufacturer": "AnBon",
+            "BOM_Manufacturer Part": "SD103AW",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "528133b3f54743a18f3af4fdaab4af6e",
+            "uuid": "ebefddbbf38c45159739f1d459dfa367"
+          }
+        ],
+        [
+          "2CZ4004",
+          1,
+          "SOD-123_L2.8-W1.8-LS3.7-RD",
+          "D5",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "CJ",
+            "BOM_Manufacturer Part": "2CZ4004",
+            "BOM_Supplier Part": "C77903",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "60a676d313ae48718a81c380b73dfe4f",
+            "uuid": "86ae71e200f755f3acabed7e69110431"
+          }
+        ],
+        [
+          "button",
+          1,
+          "HDR-F-2.54_1X2",
+          "H1",
+          {
+            "BOM_Supplier Part": "C49661",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "36b1306a115341f4b4d9407fb34974e0",
+            "uuid": "3ec77201bbcd4ecd8722658d581a4e60"
+          }
+        ],
+        [
+          "ESP32 power",
+          1,
+          "HDR-F-2.54_1X2",
+          "H2",
+          {
+            "BOM_Supplier Part": "C49661",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "36b1306a115341f4b4d9407fb34974e0",
+            "uuid": "3ec77201bbcd4ecd8722658d581a4e60"
+          }
+        ],
+        [
+          "Battery +",
+          1,
+          "HDR-M-2.54_1X1",
+          "J1",
+          {
+            "BOM_Supplier Part": "C81276",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "19c77e72422b43b59c26b9fa67af5de4",
+            "uuid": "404aa9221ff94de597b8734806e7c74f"
+          }
+        ],
+        [
+          "buzzer",
+          1,
+          "HDR-M-2.54_1X1",
+          "J3",
+          {
+            "BOM_Supplier Part": "C81276",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "19c77e72422b43b59c26b9fa67af5de4",
+            "uuid": "404aa9221ff94de597b8734806e7c74f"
+          }
+        ],
+        [
+          "motor -",
+          1,
+          "HDR-M-2.54_1X1",
+          "J4",
+          {
+            "BOM_Supplier Part": "C81276",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "19c77e72422b43b59c26b9fa67af5de4",
+            "uuid": "404aa9221ff94de597b8734806e7c74f"
+          }
+        ],
+        [
+          "ADC",
+          1,
+          "HDR-M-2.54_1X1",
+          "J5",
+          {
+            "BOM_Supplier Part": "C81276",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "19c77e72422b43b59c26b9fa67af5de4",
+            "uuid": "404aa9221ff94de597b8734806e7c74f"
+          }
+        ],
+        [
+          "Battery -",
+          1,
+          "HDR-M-2.54_1X1",
+          "J6",
+          {
+            "BOM_Supplier Part": "C81276",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "19c77e72422b43b59c26b9fa67af5de4",
+            "uuid": "404aa9221ff94de597b8734806e7c74f"
+          }
+        ],
+        [
+          "charger",
+          1,
+          "HDR-M-2.54_1X1",
+          "J7",
+          {
+            "BOM_Supplier Part": "C81276",
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer Part": "",
+            "puuid": "19c77e72422b43b59c26b9fa67af5de4",
+            "uuid": "404aa9221ff94de597b8734806e7c74f"
+          }
+        ],
+        [
+          "330uH",
+          1,
+          "IND-SMD_L5.6-W5.0",
+          "L1",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "TDK",
+            "BOM_Manufacturer Part": "B82442H1334K000",
+            "BOM_Supplier Part": "C165769",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "e0629a8d91e34e498caefa9c90adcb36",
+            "uuid": "c1dfae7d2fa24f86934d72ce7f9e984d"
+          }
+        ],
+        [
+          "ORH-G37A",
+          1,
+          "LED1206-RD_GREEN",
+          "LED2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C400037",
+            "BOM_Manufacturer": "Orient",
+            "BOM_Manufacturer Part": "ORH-G37A",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "825561d969ba4a59b48e07339056b19f",
+            "uuid": "51e69560ca3640ce948b248a154d5377"
+          }
+        ],
+        [
+          "AST1109MLTRQ",
+          1,
+          "PIEZO",
+          "LS1",
+          {
+            "BOM_Manufacturer Part": "AST1109MLTRQ",
+            "BOM_Supplier Part": "458-1093-1-ND",
+            "BOM_Supplier": "Digi-Key",
+            "puuid": "180a0bc5b5f4484e93115dcea3684966",
+            "uuid": "f96aa2d1affc41a39a6fdea1a78d42f9"
+          }
+        ],
+        [
+          "MMBT5551",
+          1,
+          "SOT-23-3_L2.9-W1.6-P1.90-LS2.8-BR",
+          "Q1",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C713611",
+            "BOM_Manufacturer": "LGE",
+            "BOM_Manufacturer Part": "BC337-40",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "b3b82869fa924bae820e3a6cfb44d689",
+            "uuid": "407d98193d064bf7903b33419cba2d5b"
+          }
+        ],
+        [
+          "MMBT5401",
+          1,
+          "SOT-23-3_L2.9-W1.6-P1.90-LS2.8-BR",
+          "Q2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C900785",
+            "BOM_Manufacturer": "ON(安森美)",
+            "BOM_Manufacturer Part": "BC32740TA",
+            "puuid": "b3b82869fa924bae820e3a6cfb44d689",
+            "uuid": "1ca5b3485d794946a58b4a6a97f188d8"
+          }
+        ],
+        [
+          "IPB042N10N3",
+          1,
+          "TO-263-2_L10.0-W9.1-P5.08-LS15.2-TL",
+          "Q4",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "Infineon",
+            "BOM_Manufacturer Part": "IRFS4310ZTRLPBF",
+            "BOM_Supplier Part": "C148160",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "24f74b0167c64dc4ac260307a6a9fe17",
+            "uuid": "f6b4b52776114275b2cdb7a79b312dd3"
+          }
+        ],
+        [
+          "100k",
+          1,
+          "R1210",
+          "R1",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "8d980e0cb4b8404e96542d2888a244bd",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "4.7k",
+          1,
+          "R1210",
+          "R2",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "8d980e0cb4b8404e96542d2888a244bd",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "3.9k",
+          1,
+          "R1210",
+          "R3",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "8d980e0cb4b8404e96542d2888a244bd",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "10k",
+          2,
+          "R1210",
+          "R4,R7",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "8d980e0cb4b8404e96542d2888a244bd",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "47k",
+          1,
+          "R1210",
+          "R5",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "8d980e0cb4b8404e96542d2888a244bd",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "1k",
+          1,
+          "R1210",
+          "R6",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "8d980e0cb4b8404e96542d2888a244bd",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "15k",
+          1,
+          "R1210",
+          "R8",
+          {
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "BOM_Manufacturer Part": "",
+            "puuid": "8d980e0cb4b8404e96542d2888a244bd",
+            "uuid": "486123a4bb814705bb1a3164561bb535"
+          }
+        ],
+        [
+          "LM2596HVS-3.3",
+          1,
+          "PG-TO-263-5_L10.0-W10.0-P1.70-LS15.3-BL-1",
+          "U2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C347444",
+            "BOM_Manufacturer": "UMW(友台半导体)",
+            "BOM_Manufacturer Part": "LM2596HVS-3.3",
+            "BOM_JLCPCB Part Class": "Extended Part",
+            "puuid": "fae39412992b4b35bf097f8c798f36bf",
+            "uuid": "42e585e262af4a13894feaba4cb5df99"
+          }
         ]
       ],
-      "updateTime": 1645895399,
+      "updateTime": 1648474727,
       "createTime": 1621005488,
       "histories": [],
       "created_at": "2021-05-14 17:18:08",
-      "updated_at": "2022-02-26 18:09:59"
+      "updated_at": "2022-03-28 15:38:47"
     },
     {
       "uuid": "8cab8c39f25c4f1ea2b1233edb17bc32",
@@ -444,9 +841,12 @@
       "updated_at": "2022-02-27 19:43:54"
     }
   ],
-  "sort": [],
+  "sort": [
+    "69a7f39eae15e24a83cb7721717932e1",
+    "9598fc33d2433f75454a7f286a572a7d"
+  ],
   "title": "open-ebike-latch",
   "foldername": "open-ebike-latch",
   "schfilename": "open-ebike-latch.json",
-  "schfilemtime": 1645895399553
+  "schfilemtime": 1648530302869
 }

@@ -128,7 +128,7 @@ uint16_t Battery::voltage()
 		this->voltage_last = readButtonPin();
 	}
 
-	if (this->voltage_last < V_BUTTON_TRIGGER)
+	if (this->voltage_pin_mean - this->voltage_last > V_BUTTON_TRIGGER)
 	{
 		button_pressed++;
 		return voltage_mean; // non sporchiamo le medie

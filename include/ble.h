@@ -43,6 +43,6 @@ public:
 
     void onConnect(BLEServer *);
     void onDisconnect(BLEServer *);
-    void notify_ble(uint8_t);
+    void notify_ble_soc(uint8_t);
     void setup_ble();
 };

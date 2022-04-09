@@ -116,7 +116,7 @@ void BLE::onDisconnect(BLEServer *pServer)
 }
 
 
-void BLE::notify_ble(uint8_t soc)
+void BLE::notify_ble_soc(uint8_t soc)
 {
     if (!deviceConnected)
         return;

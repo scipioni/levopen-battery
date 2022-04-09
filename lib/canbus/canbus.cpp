@@ -142,7 +142,8 @@ void canbus_receive_task(void *pvParameter)
 {
   int transition = 0;
   CAN_frame_t rx_frame;
-  uint8_t button, walk_button;
+  uint8_t button, walk_button; //, soc1, soc2;
+  //long charge1, charge2;
 
   for (;;)
   {
@@ -205,6 +206,22 @@ void canbus_receive_task(void *pvParameter)
         { // velocity > 0, bike is moving
           battery.resetIdle();
         }
+      }
+      else if (rx_frame.MsgID == 0x402)  
+      {
+        // 402#5D 00 00 00 CC AC 05 00
+        // 5D = 93% soc
+        // 0005ACCC = 371916mWh = 371.916Wh charge
+        battery.soc1 = rx_frame.data.u8[0];
+        battery.charge1 = (long)rx_frame.data.u8[7]<<24|(long)rx_frame.data.u8[6]<<16|rx_frame.data.u8[5]<<8|rx_frame.data.u8[4];
+
+      }
+      else if (rx_frame.MsgID == 0x403) 
+      {
+        // 403#5C 00 00 00 D4 0D 06 00
+        // 0x00060DD4 = 396756mWh = 396.756Wh —> 396.756*1.12 = 444wH
+        battery.soc2 = rx_frame.data.u8[0];
+        battery.charge2 = (long)rx_frame.data.u8[7]<<24|(long)rx_frame.data.u8[6]<<16|rx_frame.data.u8[5]<<8|rx_frame.data.u8[4];
       }
     }
   }

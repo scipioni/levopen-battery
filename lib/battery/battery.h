@@ -18,7 +18,7 @@
 #endif
 
 #ifdef BOARD_DOIT
-#define V_BUTTON_TRIGGER 130
+#define V_BUTTON_TRIGGER 100
 #endif
 
 //#define POWER_BUTTON_PIN 4
@@ -79,6 +79,12 @@ public:
 	bool idle(void);
 	uint16_t minVoltage;
 	uint16_t maxVoltage;
+
+	uint8_t soc1=0;
+	uint8_t soc2=0;
+	long charge1=0;
+	long charge2=0;
+	
 private:
 	uint16_t idle_poweroff = 0;
 

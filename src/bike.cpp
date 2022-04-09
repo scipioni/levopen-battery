@@ -41,7 +41,7 @@ void Bike::poweroff()
 
 void Bike::notify()
 {
-    this->notify_ble(battery.capacity());
+    this->notify_ble_soc(battery.capacity());
 }
 
 void Bike::notify_task(void *parameter) // questa è statica
